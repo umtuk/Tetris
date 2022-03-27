@@ -15,7 +15,9 @@ public class KeyMap {
     public KeyMap() {
         keyEvent2TypeMap = new HashMap<>();
         keyType2EventMap = new EnumMap<>(KeyType.class);
+    }
 
+    public void setDefault() {
         keyEvent2TypeMap.put(KeyEvent.VK_UP, KeyType.UP);
         keyEvent2TypeMap.put(KeyEvent.VK_DOWN, KeyType.DOWN);
         keyEvent2TypeMap.put(KeyEvent.VK_LEFT, KeyType.LEFT);

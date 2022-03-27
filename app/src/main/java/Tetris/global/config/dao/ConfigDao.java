@@ -6,15 +6,14 @@ import java.util.EnumMap;
 
 import Tetris.global.config.constant.ColorSet;
 import Tetris.global.config.constant.KeyType;
-import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.MainConfig;
 import Tetris.global.dao.sqlite.SQLStatement;
 import Tetris.global.dao.sqlite.SimpleSQLite;
 
 public class ConfigDao extends SimpleSQLite {
 
-    private static EnumMap<KeyType, String> keyString = new EnumMap<>(KeyType.class);
-    private static EnumMap<ColorSet, Integer> colorSetInt = new EnumMap<>(ColorSet.class);
+    private static EnumMap<KeyType, String> keyString;
+    private static EnumMap<ColorSet, Integer> colorSetInt;
 
     private static final String table = "Config";
     private static final String[] columns = {
@@ -33,7 +32,7 @@ public class ConfigDao extends SimpleSQLite {
         keyString.get(KeyType.PAUSE),
         keyString.get(KeyType.ROTATE),
     };
-    private final String[] dataTypes = {
+    private static final String[] dataTypes = {
         "integer",
 
         "integer",
@@ -50,7 +49,7 @@ public class ConfigDao extends SimpleSQLite {
         "integer",
     };
 
-    private final String[][] optional = {
+    private static final String[][] optional = {
         {"PRIMARY KEY",},
 
         {"NOT NULL",},
@@ -65,10 +64,9 @@ public class ConfigDao extends SimpleSQLite {
         {"NOT NULL",},
     };
 
-    private final String conditional = "id = 0";
-
-    public ConfigDao() throws SQLException {
-        super();
+    public void initMaps() {
+        keyString = new EnumMap<>(KeyType.class);
+        colorSetInt = new EnumMap<>(ColorSet.class);
 
         keyString.put(KeyType.UP, "keyUp");
         keyString.put(KeyType.DOWN, "keyDown");
@@ -81,14 +79,18 @@ public class ConfigDao extends SimpleSQLite {
         colorSetInt.put(ColorSet.DEFAULT, 0);
         colorSetInt.put(ColorSet.PROTANOPIA, 1);
         colorSetInt.put(ColorSet.TRITANOPIA, 2);
+    }
+
+    public ConfigDao() throws SQLException {
+        super();
         
+        initMaps();
+
         sql = SQLStatement.makeCreateFormat(table, columns, dataTypes, optional);
         stmt.execute(sql);
     }
 
-    public void insertInto() throws SQLException {
-        sql = SQLStatement.makeInsertIntoValuesFormat(table, columns);
-
+    public void setPstmtOfAllColumnsByMainConfig() throws SQLException {
         pstmt.setInt(1, 0);
 
         pstmt.setInt(2, colorSetInt.get(MainConfig.getColorSet()));
@@ -103,7 +105,12 @@ public class ConfigDao extends SimpleSQLite {
         pstmt.setInt(9, MainConfig.getKeyMap().get(KeyType.OK));
         pstmt.setInt(10, MainConfig.getKeyMap().get(KeyType.PAUSE));
         pstmt.setInt(11, MainConfig.getKeyMap().get(KeyType.ROTATE));
-    
+    }
+
+    public void insertInto() throws SQLException {
+        sql = SQLStatement.makeInsertIntoValuesFormat(table, columns);
+
+        setPstmtOfAllColumnsByMainConfig();
         pstmt.executeUpdate();
     }
 
@@ -114,24 +121,10 @@ public class ConfigDao extends SimpleSQLite {
     }
     
     public void updateFromWhere() throws SQLException {
-        sql = SQLStatement.makeUpdateFromWhereFormat(table, columns, conditional);
+        sql = SQLStatement.makeUpdateFromWhereFormat(table, columns, "id=0");
         pstmt = conn.prepareStatement(sql);
 
-        pstmt.setInt(1, 0);
-
-        pstmt.setInt(2, colorSetInt.get(MainConfig.getColorSet()));
-
-        pstmt.setInt(3, MainConfig.getWindowSize().getWidth());
-        pstmt.setInt(4, MainConfig.getWindowSize().getHeight());
-
-        pstmt.setInt(5, MainConfig.getKeyMap().get(KeyType.UP));
-        pstmt.setInt(6, MainConfig.getKeyMap().get(KeyType.DOWN));
-        pstmt.setInt(7, MainConfig.getKeyMap().get(KeyType.LEFT));
-        pstmt.setInt(8, MainConfig.getKeyMap().get(KeyType.RIGHT));
-        pstmt.setInt(9, MainConfig.getKeyMap().get(KeyType.OK));
-        pstmt.setInt(10, MainConfig.getKeyMap().get(KeyType.PAUSE));
-        pstmt.setInt(11, MainConfig.getKeyMap().get(KeyType.ROTATE));
-
+        setPstmtOfAllColumnsByMainConfig();
         pstmt.executeUpdate();
     }
 

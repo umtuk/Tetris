@@ -12,6 +12,13 @@ public class MainConfig {
 
     private static KeyMap keyMap;
 
+    public static void setDefault() {
+        colorSet = ColorSet.DEFAULT;
+        windowSize = WindowSize.W800_H600;
+
+        keyMap.setDefault();
+    }
+
     public static ColorSet getColorSet() {
         return colorSet;
     }
