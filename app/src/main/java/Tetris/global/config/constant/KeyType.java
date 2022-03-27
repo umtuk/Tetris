@@ -6,6 +6,8 @@ public enum KeyType {
     LEFT,
     RIGHT,
 
+    OK,
+    PAUSE,
+
     ROTATE,
-    // 
 }
