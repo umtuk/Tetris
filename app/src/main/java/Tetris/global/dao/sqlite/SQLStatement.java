@@ -1,34 +1,39 @@
 package Tetris.global.dao.sqlite;
 
 public class SQLStatement {
-        
-    private static final String CREATE_TABLE_IF_NOT_EXISTS = " CREATE TABLE IF NOT EXISTS ";
-    private static final String INSERT_INTO = " INSERT INTO ";
-    private static final String VALUES = " VALUES ";
-    private static final String SELECT = " SELECT ";
-    private static final String FROM = " FROM ";
-    private static final String WHERE = " WHERE ";
-    private static final String UPDATE = " UPDATE ";
-    private static final String SET = " SET ";
-    private static final String DELETE_FROM = " DELETE FROM ";
+    private static SQLStatement INSTANCE = new SQLStatement();
 
-    private static String makeListFormat(String[] values) {
+    public static SQLStatement getInstance() {
+        return INSTANCE;
+    }
+        
+    private final String CREATE_TABLE_IF_NOT_EXISTS = " CREATE TABLE IF NOT EXISTS ";
+    private final String INSERT_INTO = " INSERT INTO ";
+    private final String VALUES = " VALUES ";
+    private final String SELECT = " SELECT ";
+    private final String FROM = " FROM ";
+    private final String WHERE = " WHERE ";
+    private final String UPDATE = " UPDATE ";
+    private final String SET = " SET ";
+    private final String DELETE_FROM = " DELETE FROM ";
+
+    private String makeListFormat(String[] values) {
         return String.join(",", values);
     }
 
-    private static String makeRoundFormat(String value) {
+    private String makeRoundFormat(String value) {
         return "(" + value + ")";
     }
 
-    private static String makeListNRoundFormat(String[] values) {
+    private String makeListNRoundFormat(String[] values) {
         return makeRoundFormat(makeListFormat(values));
     }
 
-    private static String makeAssignFormat(String value) {
+    private String makeAssignFormat(String value) {
         return value + "=?";
     }
 
-    private static String[] makeAssignFormat(String[] values) {
+    private String[] makeAssignFormat(String[] values) {
         int n = values.length;
         String[] ret = new String[n];
 
@@ -38,11 +43,11 @@ public class SQLStatement {
         return ret;
     }
 
-    private static String makeAssignNListFormat(String[] values) {
+    private String makeAssignNListFormat(String[] values) {
         return makeListFormat(makeAssignFormat(values));
     }
 
-    private static String makeUndefinedValueListNRoundFormat(int n) {
+    private String makeUndefinedValueListNRoundFormat(int n) {
         if (n == 0) return "";
         
         String ret = "?";
@@ -52,7 +57,7 @@ public class SQLStatement {
         return makeRoundFormat(ret);
     }
 
-    public static String makeCreateFormat(String table, String[] columns, String[] dataTypes, String[][] optional) {
+    public String makeCreateFormat(String table, String[] columns, String[] dataTypes, String[][] optional) {
         String columnList = "";
         for (int i = 0; i < columns.length; i++) {
             columnList += columns[i] + " " + dataTypes[i]; 
@@ -68,38 +73,52 @@ public class SQLStatement {
         ;
     }
 
-    public static String makeInsertIntoValuesFormat(String table, String[] columns) {
+    public String makeInsertIntoValuesFormat(String table, String[] columns) {
         return INSERT_INTO + table
             + makeListNRoundFormat(columns)
             + VALUES + makeUndefinedValueListNRoundFormat(columns.length)
         ;
     }
 
-    public static String makeSelectFromFormat(String table) {
+    public String makeSelectAllFromFormat(String table) {
         return SELECT  + "*"
             + FROM + table
         ;
     }
 
-    public static String makeSelectFromFormat(String table, String[] columns) {
+    public String makeSelectFromFormat(String table, String[] columns) {
         return SELECT + makeListFormat(columns)
             + FROM + table
         ;
     }
 
-    public static String makeUpdateFromWhereFormat(String table, String[] columns, String conditional) {
+    public String makeSelectAllFromWhereFormat(String table, String conditional) {
+        return SELECT  + "*"
+            + FROM + table
+            + WHERE + conditional
+        ;
+    }
+
+    public String makeSelectFromWhereFormat(String table, String[] columns, String conditional) {
+        return SELECT + makeListFormat(columns)
+            + FROM + table
+            + WHERE + conditional
+        ;
+    }
+
+    public String makeUpdateFromWhereFormat(String table, String[] columns, String conditional) {
         return UPDATE + table
             + SET + makeAssignNListFormat(columns)
             + WHERE + conditional
         ;
     }
 
-    public static String makeDeleteFromFormat(String table) {
+    public String makeDeleteFromFormat(String table) {
         return DELETE_FROM + table
         ;
     }
 
-    public static String makeDeleteFromWhereFormat(String table, String conditional) {
+    public String makeDeleteFromWhereFormat(String table, String conditional) {
         return DELETE_FROM + table
             + WHERE + conditional
         ;

@@ -1,0 +1,126 @@
+package Tetris.global.config.dao;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Iterator;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.KeyType;
+import Tetris.global.config.constant.WindowSize;
+import Tetris.global.config.entity.MainConfig;
+import Tetris.global.config.entity.branch.KeyMap;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class ConfigDaoTest {
+
+    private final ConfigDao configDao = ConfigDao.getInstance();
+    private MainConfig mainConfig = MainConfig.getInstance();
+
+    @BeforeAll
+    public void beforeAll() throws SQLException {
+        configDao.createDefaultIfNotExists();
+    }
+
+    @Test
+    void testCreateDefaultIfNotExists() throws SQLException {
+        configDao.createDefaultIfNotExists();
+
+        ResultSet rs = configDao.read(); rs.next();
+
+        mainConfig.setDefault();
+
+        assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == mainConfig.getColorSet());
+        assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == mainConfig.getWindowSize());
+
+        Iterator<KeyType> keyTypes = configDao.getKeyType2Column().keySet().iterator();
+        while (keyTypes.hasNext()) {
+            KeyType keyType = keyTypes.next();
+
+            assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
+        }
+    }
+
+    @Test
+    void testRead() throws SQLException {
+        ResultSet rs = configDao.read(); rs.next();
+
+        assertNotNull(rs.getInt("id"));
+        assertNotNull(rs.getInt("colorSet"));
+        assertNotNull(rs.getString("windowSize"));
+
+        KeyMap keyMap = new KeyMap(); keyMap.setDefault();
+        Iterator<KeyType> keyTypes = configDao.getKeyType2Column().keySet().iterator();
+        while (keyTypes.hasNext()) {
+            KeyType keyType = keyTypes.next();
+
+            assertNotNull(rs.getInt(configDao.getKeyType2Column().get(keyType)));
+        }
+    }
+
+    @Test
+    void testSetMainConfig() throws SQLException {
+        ResultSet rs = configDao.read(); rs.next();
+
+        configDao.setMainConfig();
+
+        assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == mainConfig.getColorSet());
+        assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == mainConfig.getWindowSize());
+
+        Iterator<KeyType> keyTypes = configDao.getKeyType2Column().keySet().iterator();
+        while (keyTypes.hasNext()) {
+            KeyType keyType = keyTypes.next();
+
+            assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
+        }
+    }
+
+    @Test
+    void testSetParametersByMainConfig() throws SQLException {
+        configDao.setParametersByMainConfig();
+
+        testRead();
+    }
+
+    @Test
+    void testUpdate() throws SQLException {
+        Integer keyEvent = KeyEvent.VK_0;
+        KeyType keyType = KeyType.UP;
+
+        mainConfig.setColorSet(ColorSet.PROTANOPIA);
+        mainConfig.setWindowSize(WindowSize.W1280_H960);
+        mainConfig.getKeyMap().update(keyEvent, keyType);
+
+        configDao.update();
+        ResultSet rs = configDao.read(); rs.next();
+
+        assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == ColorSet.PROTANOPIA);
+        assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == WindowSize.W1280_H960);
+        assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == keyEvent);
+    }
+
+    @Test
+    void testUpdateDefault() throws SQLException {
+        configDao.updateDefault();
+
+        ResultSet rs = configDao.read(); rs.next();
+        mainConfig.setDefault();
+
+        assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == mainConfig.getColorSet());
+        assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == mainConfig.getWindowSize());
+
+        Iterator<KeyType> keyTypes = configDao.getKeyType2Column().keySet().iterator();
+        while (keyTypes.hasNext()) {
+            KeyType keyType = keyTypes.next();
+
+            assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
+        }
+    }
+}

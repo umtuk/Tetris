@@ -6,44 +6,51 @@ import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.branch.KeyMap;
 
 public class MainConfig {
+    private static MainConfig INSTANCE = new MainConfig();
+
+    public static MainConfig getInstance() {
+        return INSTANCE;
+    }
     
-    private static ColorSet colorSet;
-    private static WindowSize windowSize;
+    private ColorSet colorSet;
+    private WindowSize windowSize;
 
-    private static KeyMap keyMap;
+    private KeyMap keyMap;
 
-    public static void setDefault() {
+    public void setDefault() {
         colorSet = ColorSet.DEFAULT;
         windowSize = WindowSize.W800_H600;
 
         keyMap.setDefault();
     }
 
-    public static ColorSet getColorSet() {
+    public MainConfig() {
+        keyMap = new KeyMap();
+    }
+
+    public ColorSet getColorSet() {
         return colorSet;
     }
 
-    public static WindowSize getWindowSize() {
+    public WindowSize getWindowSize() {
         return windowSize;
     }
 
-    public static KeyMap getKeyMap() {
+    public KeyMap getKeyMap() {
         return keyMap;
     }
 
-    public static void setColorSet(ColorSet _colorSet) {
-        colorSet = _colorSet;
+    public void setColorSet(ColorSet colorSet) {
+        this.colorSet = colorSet;
     }
 
-    public static void setWindowSize(WindowSize _WindowSize) {
-        windowSize = _WindowSize;
+    public void setWindowSize(WindowSize windowSize) {
+        this.windowSize = windowSize;
     }
 
-    public static void putKeyMap(Integer keyEvent, KeyType keyType) {
-        keyMap.put(keyEvent, keyType);
-    }
-
-    public static void removeKeyMap(Integer keyEvent) {
-        keyMap.remove(keyEvent);
+    public void updateKeyMap(Integer keyEvent, KeyType keyType) {
+        keyMap.update(keyEvent, keyType);
     }
 }
+
+

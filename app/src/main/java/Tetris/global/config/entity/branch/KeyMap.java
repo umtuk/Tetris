@@ -17,36 +17,13 @@ public class KeyMap {
         keyType2EventMap = new EnumMap<>(KeyType.class);
     }
 
-    public void setDefault() {
-        keyEvent2TypeMap.put(KeyEvent.VK_UP, KeyType.UP);
-        keyEvent2TypeMap.put(KeyEvent.VK_DOWN, KeyType.DOWN);
-        keyEvent2TypeMap.put(KeyEvent.VK_LEFT, KeyType.LEFT);
-        keyEvent2TypeMap.put(KeyEvent.VK_RIGHT, KeyType.RIGHT);
+    public void update(Integer keyEvent, KeyType keyType) {
+        Integer prevKeyEvent = get(keyType);
 
-        keyEvent2TypeMap.put(KeyEvent.VK_ENTER, KeyType.OK);
-        keyEvent2TypeMap.put(KeyEvent.VK_ESCAPE, KeyType.PAUSE);
+        keyEvent2TypeMap.remove(prevKeyEvent);
 
-        keyEvent2TypeMap.put(KeyEvent.VK_R, KeyType.ROTATE);
-
-
-        keyType2EventMap.put(KeyType.UP, KeyEvent.VK_UP);
-        keyType2EventMap.put(KeyType.DOWN, KeyEvent.VK_DOWN);
-        keyType2EventMap.put(KeyType.LEFT, KeyEvent.VK_LEFT);
-        keyType2EventMap.put(KeyType.RIGHT, KeyEvent.VK_RIGHT);
-
-        keyType2EventMap.put(KeyType.OK, KeyEvent.VK_ENTER);
-        keyType2EventMap.put(KeyType.PAUSE, KeyEvent.VK_ESCAPE);
-
-        keyType2EventMap.put(KeyType.ROTATE, KeyEvent.VK_R);
-    }
-
-    public void put(Integer keyEvent, KeyType keyType) {
         keyEvent2TypeMap.put(keyEvent, keyType);
         keyType2EventMap.put(keyType, keyEvent);
-    }
-
-    public void remove(Integer keyEvent) {
-        keyEvent2TypeMap.remove(keyEvent);
     }
 
     public KeyType get(Integer keyEvent) {
@@ -55,5 +32,25 @@ public class KeyMap {
 
     public Integer get (KeyType keyType) {
         return keyType2EventMap.get(keyType);
+    }
+
+    public void setDefault() {
+        update(KeyEvent.VK_UP, KeyType.UP);
+        update(KeyEvent.VK_DOWN, KeyType.DOWN);
+        update(KeyEvent.VK_LEFT, KeyType.LEFT);
+        update(KeyEvent.VK_RIGHT, KeyType.RIGHT);
+
+        update(KeyEvent.VK_ENTER, KeyType.OK);
+        update(KeyEvent.VK_ESCAPE, KeyType.PAUSE);
+
+        update(KeyEvent.VK_R, KeyType.ROTATE);
+    }
+
+    public Map<Integer, KeyType> getKeyEvent2TypeMap() {
+        return keyEvent2TypeMap;
+    }
+
+    public EnumMap<KeyType, Integer> getKeyType2EventMap() {
+        return keyType2EventMap;
     }
 }
