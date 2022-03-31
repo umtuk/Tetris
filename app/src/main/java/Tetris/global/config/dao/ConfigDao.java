@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.MainConfig;
@@ -38,6 +39,9 @@ public class ConfigDao {
     private Map<String, WindowSize> string2WindowSize;
     private EnumMap<WindowSize, String> windowSize2String;
 
+    private EnumMap<Difficulty, Integer> difficulty2Integer;
+    private Map<Integer, Difficulty> integer2Difficulty;
+
     private final String table = "Config";
     private final String[] columns = {
         "id",
@@ -53,6 +57,8 @@ public class ConfigDao {
         "keyOk",
         "keyPause",
         "keyRotate",
+
+        "difficulty"
     };
     private final String[] dataTypes = {
         "integer",
@@ -67,6 +73,8 @@ public class ConfigDao {
         "integer",
         "integer",
         "integer",
+        "integer",
+
         "integer",
     };
 
@@ -83,6 +91,8 @@ public class ConfigDao {
         {"NOT NULL",},
         {"NOT NULL",},
         {"NOT NULL",},
+
+        {"NOT NULL",},
     };
 
     private Object[] parameters;
@@ -97,7 +107,12 @@ public class ConfigDao {
         windowSize2String.put(windowSize, s);
     }
 
-    public void initMaps() {
+    private void putIntegerNDifficulty(Integer i, Difficulty difficulty) {
+        integer2Difficulty.put(i, difficulty);
+        difficulty2Integer.put(difficulty, i);
+    }
+
+    private void initMaps() {
         keyType2Column = new EnumMap<>(KeyType.class);
 
         colorSet2Integer = new EnumMap<>(ColorSet.class);
@@ -105,6 +120,9 @@ public class ConfigDao {
 
         windowSize2String = new EnumMap<>(WindowSize.class);
         string2WindowSize = new HashMap<>();
+
+        difficulty2Integer = new EnumMap<>(Difficulty.class);
+        integer2Difficulty = new HashMap<>();
 
         keyType2Column.put(KeyType.UP, columns[3]);
         keyType2Column.put(KeyType.DOWN, columns[4]);
@@ -121,6 +139,10 @@ public class ConfigDao {
         putStringNWindowSize("W800_H600", WindowSize.W800_H600);
         putStringNWindowSize("W1280_H960", WindowSize.W1280_H960);
         putStringNWindowSize("W1920_H1080", WindowSize.W1920_H1080);
+        
+        putIntegerNDifficulty(0, Difficulty.EASY);
+        putIntegerNDifficulty(1, Difficulty.NORMAL);
+        putIntegerNDifficulty(2, Difficulty.HARD);
     }
 
     public ConfigDao() throws SQLException {
@@ -129,7 +151,7 @@ public class ConfigDao {
 
         initMaps();
 
-        parameters = new Object[10]; setParametersByMainConfig();
+        parameters = new Object[11]; setParametersByMainConfig();
         simpleSQLite.createTable(table, columns, dataTypes, optional);
     }
 
@@ -148,6 +170,8 @@ public class ConfigDao {
         parameters[7] = mainConfig.getKeyMap().get(KeyType.OK); // keyOk
         parameters[8] = mainConfig.getKeyMap().get(KeyType.PAUSE); // keyPause
         parameters[9] = mainConfig.getKeyMap().get(KeyType.ROTATE); // keyRotate
+
+        parameters[10] = difficulty2Integer.get(mainConfig.getDifficulty()); // difficulty
     }
 
     public void createDefaultIfNotExists() throws SQLException {
@@ -177,6 +201,8 @@ public class ConfigDao {
 
             mainConfig.updateKeyMap(rs.getInt(keyType2Column.get(keyType)), keyType);
         }
+
+        mainConfig.setDifficulty(integer2Difficulty.get(rs.getInt("difficulty")));
     }
     
     public void update() throws SQLException {
@@ -199,5 +225,9 @@ public class ConfigDao {
 
     public Map<String, WindowSize> getString2WindowSize() {
         return string2WindowSize;
+    }
+
+    public Map<Integer, Difficulty> getInteger2Difficulty() {
+        return integer2Difficulty;
     }
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.branch.KeyMap;
@@ -113,5 +114,19 @@ public class MainConfigTest {
 
         assertTrue(mainConfig.getWindowSize().getWidth() == windowSize.getWidth());
         assertTrue(mainConfig.getWindowSize().getHeight() == windowSize.getHeight());
+    }
+
+    @Test
+    void testGetDifficulty() {
+        assertTrue(mainConfig.getDifficulty() == Difficulty.NORMAL);
+    }
+
+    @Test
+    void testSetDifficulty() {
+        Difficulty difficulty = Difficulty.HARD;
+
+        mainConfig.setDifficulty(difficulty);
+
+        assertTrue(mainConfig.getDifficulty() == difficulty);
     }
 }

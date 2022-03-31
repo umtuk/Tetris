@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.MainConfig;
@@ -49,6 +50,8 @@ public class ConfigDaoTest {
 
             assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
         }
+
+        assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == mainConfig.getDifficulty());
     }
 
     @Test
@@ -66,6 +69,8 @@ public class ConfigDaoTest {
 
             assertNotNull(rs.getInt(configDao.getKeyType2Column().get(keyType)));
         }
+
+        assertNotNull(rs.getInt("difficulty"));
     }
 
     @Test
@@ -83,6 +88,8 @@ public class ConfigDaoTest {
 
             assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
         }
+
+        assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == mainConfig.getDifficulty());
     }
 
     @Test
@@ -100,16 +107,20 @@ public class ConfigDaoTest {
 
             assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
         }
+
+        assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == mainConfig.getDifficulty());
     }
 
     @Test
     void testUpdate() throws SQLException {
         Integer keyEvent = KeyEvent.VK_0;
         KeyType keyType = KeyType.UP;
+        Difficulty difficulty = Difficulty.HARD;
 
         mainConfig.setColorSet(ColorSet.PROTANOPIA);
         mainConfig.setWindowSize(WindowSize.W1280_H960);
         mainConfig.getKeyMap().update(keyEvent, keyType);
+        mainConfig.setDifficulty(difficulty);
 
         configDao.update();
         ResultSet rs = configDao.read(); rs.next();
@@ -117,6 +128,7 @@ public class ConfigDaoTest {
         assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == ColorSet.PROTANOPIA);
         assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == WindowSize.W1280_H960);
         assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == keyEvent);
+        assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == Difficulty.HARD);
     }
 
     @Test
@@ -135,6 +147,8 @@ public class ConfigDaoTest {
 
             assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
         }
+
+        assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == mainConfig.getDifficulty());
     }
 
     @AfterAll

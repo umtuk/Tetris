@@ -1,6 +1,9 @@
 package Tetris.global.config.entity;
 
+import java.util.Iterator;
+
 import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.entity.branch.KeyMap;
@@ -14,12 +17,14 @@ public class MainConfig {
     
     private ColorSet colorSet;
     private WindowSize windowSize;
+    private Difficulty difficulty;
 
     private KeyMap keyMap;
 
     public void setDefault() {
         colorSet = ColorSet.DEFAULT;
         windowSize = WindowSize.W800_H600;
+        difficulty = Difficulty.NORMAL;
 
         keyMap.setDefault();
     }
@@ -50,6 +55,14 @@ public class MainConfig {
 
     public void updateKeyMap(Integer keyEvent, KeyType keyType) {
         keyMap.update(keyEvent, keyType);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }
 
