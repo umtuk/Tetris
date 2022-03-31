@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -23,10 +24,12 @@ public class ConfigDaoTest {
 
     private final ConfigDao configDao = ConfigDao.getInstance();
     private MainConfig mainConfig = MainConfig.getInstance();
+    private ResultSet prev;
 
     @BeforeAll
     public void beforeAll() throws SQLException {
         configDao.createDefaultIfNotExists();
+        prev = configDao.read();
     }
 
     @Test
@@ -67,9 +70,9 @@ public class ConfigDaoTest {
 
     @Test
     void testSetMainConfig() throws SQLException {
-        ResultSet rs = configDao.read(); rs.next();
+        ResultSet rs = configDao.read();
 
-        configDao.setMainConfig();
+        configDao.setMainConfig(rs);
 
         assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == mainConfig.getColorSet());
         assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == mainConfig.getWindowSize());
@@ -86,7 +89,17 @@ public class ConfigDaoTest {
     void testSetParametersByMainConfig() throws SQLException {
         configDao.setParametersByMainConfig();
 
-        testRead();
+        ResultSet rs = configDao.read(); rs.next();
+
+        assertTrue(configDao.getInteger2ColorSet().get(rs.getInt("colorSet")) == mainConfig.getColorSet());
+        assertTrue(configDao.getString2WindowSize().get(rs.getString("windowSize")) == mainConfig.getWindowSize());
+
+        Iterator<KeyType> keyTypes = configDao.getKeyType2Column().keySet().iterator();
+        while (keyTypes.hasNext()) {
+            KeyType keyType = keyTypes.next();
+
+            assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
+        }
     }
 
     @Test
@@ -122,5 +135,13 @@ public class ConfigDaoTest {
 
             assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
         }
+    }
+
+    @AfterAll
+    void afterAll() throws SQLException {
+        if (prev.isClosed())
+            configDao.createDefaultIfNotExists();
+        else
+            configDao.setMainConfig(prev);
     }
 }

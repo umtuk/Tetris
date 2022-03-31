@@ -27,8 +27,8 @@ public class ConfigDao {
         return INSTANCE;
     }
 
-    private final SimpleSQLite simpleSQLite = SimpleSQLite.getInstance();
-    private final MainConfig mainConfig = MainConfig.getInstance();
+    private final SimpleSQLite simpleSQLite;
+    private final MainConfig mainConfig;
 
     private EnumMap<KeyType, String> keyType2Column;
 
@@ -46,13 +46,13 @@ public class ConfigDao {
 
         "windowSize",
 
-        keyType2Column.get(KeyType.UP),
-        keyType2Column.get(KeyType.DOWN),
-        keyType2Column.get(KeyType.LEFT),
-        keyType2Column.get(KeyType.RIGHT),
-        keyType2Column.get(KeyType.OK),
-        keyType2Column.get(KeyType.PAUSE),
-        keyType2Column.get(KeyType.ROTATE),
+        "keyUp",
+        "keyDown",
+        "keyleft",
+        "keyRight",
+        "keyOk",
+        "keyPause",
+        "keyRotate",
     };
     private final String[] dataTypes = {
         "integer",
@@ -106,13 +106,13 @@ public class ConfigDao {
         windowSize2String = new EnumMap<>(WindowSize.class);
         string2WindowSize = new HashMap<>();
 
-        keyType2Column.put(KeyType.UP, "keyUp");
-        keyType2Column.put(KeyType.DOWN, "keyDown");
-        keyType2Column.put(KeyType.LEFT, "keyLeft");
-        keyType2Column.put(KeyType.RIGHT, "keyRight");
-        keyType2Column.put(KeyType.OK, "keyOk");
-        keyType2Column.put(KeyType.PAUSE, "keyPause");
-        keyType2Column.put(KeyType.ROTATE, "keyRotate");
+        keyType2Column.put(KeyType.UP, columns[3]);
+        keyType2Column.put(KeyType.DOWN, columns[4]);
+        keyType2Column.put(KeyType.LEFT, columns[5]);
+        keyType2Column.put(KeyType.RIGHT, columns[6]);
+        keyType2Column.put(KeyType.OK, columns[7]);
+        keyType2Column.put(KeyType.PAUSE, columns[8]);
+        keyType2Column.put(KeyType.ROTATE, columns[9]);
 
         putIntegerNColorSet(0, ColorSet.DEFAULT);
         putIntegerNColorSet(1, ColorSet.PROTANOPIA);
@@ -124,7 +124,11 @@ public class ConfigDao {
     }
 
     public ConfigDao() throws SQLException {
+        simpleSQLite = SimpleSQLite.getInstance();
+        mainConfig = MainConfig.getInstance();
+
         initMaps();
+
         parameters = new Object[10]; setParametersByMainConfig();
         simpleSQLite.createTable(table, columns, dataTypes, optional);
     }
@@ -149,7 +153,7 @@ public class ConfigDao {
     public void createDefaultIfNotExists() throws SQLException {
         ResultSet rs = simpleSQLite.selectAllFromWhere(table, "id=0");
 
-        if (rs.wasNull()) {
+        if (rs.isClosed()) {
             mainConfig.setDefault();
             setParametersByMainConfig();
             simpleSQLite.insertInto(table, columns, parameters);
@@ -160,8 +164,9 @@ public class ConfigDao {
         return simpleSQLite.selectAllFromWhere(table, "id=0");
     }
 
-    public void setMainConfig() throws SQLException {
-        ResultSet rs = read(); rs.next();
+    public void setMainConfig(ResultSet rs) throws SQLException {
+        if (rs.isBeforeFirst())
+            rs.next();
 
         mainConfig.setColorSet(integer2ColorSet.get(rs.getInt("colorSet")));
         mainConfig.setWindowSize(string2WindowSize.get(rs.getString("windowSize")));
