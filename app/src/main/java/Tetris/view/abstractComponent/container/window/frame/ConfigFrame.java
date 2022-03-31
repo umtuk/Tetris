@@ -9,18 +9,45 @@ import java.awt.*;
 
 public class ConfigFrame extends SimpleJFrame{
     public ConfigFrame(){
-        setTitle("configFrame");
+        setTitle("설정 창");
 
-        JPanel mainPanel = new JPanel();
+        JPanel ButtonPanel = new JPanel();
+        JPanel ConfigPanel = new JPanel();
+
+        configPanel(ConfigPanel);
+        buttonPanel(ButtonPanel);
+
+        setVisible(true);
+    }
+
+    public void configPanel(JPanel ConfigPanel){
+        ConfigPanel.setSize(new Dimension(50, 40));
+        ConfigPanel.setLayout(new GridLayout(3, 0, 10, 20));
+        String[] WindowSize = {"1", "2", "3"};
+        String[] ColorSet = {"일반모드", "색맹모드"};
+        
+        JComboBox<String> WindowSizeBox = new JComboBox(WindowSize);
+        JComboBox<String> ColorSetBox = new JComboBox(ColorSet);
+        
+        JLabel lb_WindowSize = new JLabel("창 크기");
+        JLabel lb_ColorSet = new JLabel("색 모드");
+
+        ConfigPanel.add(lb_WindowSize, BorderLayout.WEST);
+        ConfigPanel.add(WindowSizeBox, BorderLayout.WEST);
+
+        ConfigPanel.add(lb_ColorSet, BorderLayout.WEST);
+        ConfigPanel.add(ColorSetBox, BorderLayout.WEST);
+        
+        add(ConfigPanel, BorderLayout.WEST);
+    }
+
+    public void buttonPanel(JPanel buttonPanel){
+
         JButton SaveB = new JButton("저장");
         JButton CancleB = new JButton("나가기");
-        FlowLayout FL = new FlowLayout();
-        
-        FL.setAlignment(FlowLayout.CENTER);
-        mainPanel.setLayout(FL);
-        
-        mainPanel.add(SaveB);
-        mainPanel.add(CancleB);
+
+        buttonPanel.add(SaveB);
+        buttonPanel.add(CancleB);
 
         CancleB.addActionListener(new ActionListener(){
             @Override
@@ -28,9 +55,7 @@ public class ConfigFrame extends SimpleJFrame{
                 dispose();
             }
         });
-
-        add(mainPanel);
-        setVisible(true);
+        add(buttonPanel, BorderLayout.EAST);
     }
 
     public static void main(String[] args){
