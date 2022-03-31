@@ -71,6 +71,7 @@ gradle-app.setting
 .gradletasknamecache
 
 .vscode
+*.db
 
 # Eclipse Gradle plugin generated files
 # Eclipse Core
