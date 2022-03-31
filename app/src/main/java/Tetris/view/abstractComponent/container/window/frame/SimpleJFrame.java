@@ -10,8 +10,8 @@ public class SimpleJFrame extends JFrame{
     public int WIDTH = 500;
     public SimpleJFrame(){
         setTitle("Tetris");
-        setPreferredSize(new Dimension(500, 300));
-        setSize(500, 300);
+        setSize(WIDTH, HEIGHT);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -23,6 +23,7 @@ public class SimpleJFrame extends JFrame{
 
         //우측 상단에 X버튼을 누르면 종료
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         setVisible(true);
     }
