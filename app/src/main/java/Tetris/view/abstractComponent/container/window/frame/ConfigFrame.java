@@ -2,6 +2,9 @@ package Tetris.view.abstractComponent.container.window.frame;
 
 import javax.swing.*;
 
+import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.KeyType;
+import Tetris.global.config.constant.WindowSize;
 import Tetris.view.actionListener.ActionEvent;
 import Tetris.view.actionListener.MouseListener;
 import java.awt.event.*;
@@ -22,13 +25,13 @@ public class ConfigFrame extends SimpleJFrame{
 
     public void configPanel(JPanel ConfigPanel){
         ConfigPanel.setSize(new Dimension(50, 40));
-        ConfigPanel.setLayout(new GridLayout(3, 0, 10, 20));
-        String[] WindowSize = {"1", "2", "3"};
-        String[] ColorSet = {"일반모드", "색맹모드"};
+        ConfigPanel.setLayout(new GridLayout(0, 2, 10, 20));
+        WindowSize[] windowSize = WindowSize.values();
+        ColorSet[] colorSets = ColorSet.values();
         
-        JComboBox<String> WindowSizeBox = new JComboBox(WindowSize);
-        JComboBox<String> ColorSetBox = new JComboBox(ColorSet);
-        
+        JComboBox<String> WindowSizeBox = new JComboBox(windowSize);
+        JComboBox<String> ColorSetBox = new JComboBox(colorSets);
+
         JLabel lb_WindowSize = new JLabel("창 크기");
         JLabel lb_ColorSet = new JLabel("색 모드");
 
@@ -37,7 +40,7 @@ public class ConfigFrame extends SimpleJFrame{
 
         ConfigPanel.add(lb_ColorSet, BorderLayout.WEST);
         ConfigPanel.add(ColorSetBox, BorderLayout.WEST);
-        
+
         add(ConfigPanel, BorderLayout.WEST);
     }
 

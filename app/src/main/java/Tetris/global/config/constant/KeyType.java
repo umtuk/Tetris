@@ -6,6 +6,5 @@ public enum KeyType {
     LEFT,
     RIGHT,
 
-    ROTATE,
-    // 
+    ROTATE;
 }
