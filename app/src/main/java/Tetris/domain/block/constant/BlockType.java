@@ -4,5 +4,9 @@ public enum BlockType {
     
     IBLOCK,
     JBLOCK,
-    
+    LBLOCK,
+    OBLOCK,
+    SBLOCK,
+    TBLOCK,
+    ZBLOCK,
 }
