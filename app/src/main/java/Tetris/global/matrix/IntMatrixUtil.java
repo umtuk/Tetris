@@ -18,7 +18,9 @@ public class IntMatrixUtil {
 
         int[][] res = new int[col][row];
 
-        // 
+        for (int r = 0; r < row; r++)
+            for (int c = 0; c < col; c++)
+            res[c][r] = matrix[row - r - 1][c];
 
         return res;
     }
