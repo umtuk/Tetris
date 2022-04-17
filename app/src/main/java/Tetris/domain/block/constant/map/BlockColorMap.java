@@ -7,11 +7,6 @@ import Tetris.global.config.constant.ColorSet;
 import Tetris.global.constant.color.BaseColor;
 
 public class BlockColorMap {
-    private static BlockColorMap INSTANCE = new BlockColorMap();
-
-    public static BlockColorMap getInstance() {
-        return INSTANCE;
-    }
     
     private static EnumMap<ColorSet, EnumMap<BlockType, BaseColor>> blockColorMap;
     

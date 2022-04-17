@@ -1,7 +1,5 @@
 package Tetris.global.config.entity;
 
-import java.util.Iterator;
-
 import Tetris.global.config.constant.ColorSet;
 import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
@@ -31,6 +29,7 @@ public class MainConfig {
 
     public MainConfig() {
         keyMap = new KeyMap();
+        setDefault();
     }
 
     public ColorSet getColorSet() {

@@ -28,4 +28,12 @@ public abstract class Block {
     public int getColor() {
         return color;
     }
+
+    public void setShape(int[][] shape) {
+        this.shape = shape;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

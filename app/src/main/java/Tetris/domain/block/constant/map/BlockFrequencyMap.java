@@ -49,7 +49,7 @@ public class BlockFrequencyMap {
         blockFrequencyMap.put(Difficulty.HARD, hardFrequencyMap);
     }
 
-    public static Integer getFrequency(Difficulty difficulty, BlockType blockType) {
+    public static int getFrequency(Difficulty difficulty, BlockType blockType) {
         return blockFrequencyMap.get(difficulty).get(blockType);
     }
 }
