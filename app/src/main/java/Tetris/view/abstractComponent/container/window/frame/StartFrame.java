@@ -1,45 +1,78 @@
 package Tetris.view.abstractComponent.container.window.frame;
 
 import javax.swing.*;
+import javax.swing.border.*;
+
 import java.awt.*;
 import java.awt.event.*;
-
 import Tetris.view.actionListener.MouseListener;
 
-public class StartFrame extends SimpleJFrame{
-    public void buttonPanel(JPanel ButtonP){
-        ButtonP.setSize(100, 150);
-        JButton StartB = new JButton("게임시작");
+public class startFrame extends SimpleJFrame{
+    public JPanel mainP = new JPanel();
+    public startFrame(){
+        int WIDTHs = WIDTH;
+        JPanel buttonP = new JPanel();
+        JPanel emptyP1 = new JPanel();
+        JPanel emptyP2 = new JPanel();
+        JPanel emptyP3 = new JPanel(){
+            Image background = new ImageIcon(startFrame.class.getResource("tetris_image.jpg")).getImage();
+            public void paint(Graphics g){
+                g.drawImage(background, (int)(WIDTHs/2)-210, 100, null);
+            }
+        };
+        JButton startB = new JButton("게임시작");
+        JButton scoreboardB = new JButton("스코어보드");
         JButton configB = new JButton("설정");
-        JButton ScoreBoardB = new JButton("랭킹");
-        JButton ExitB = new JButton("나가기");
-
-        ButtonP.setLayout(new GridLayout(4, 1, 0, 10));
+        JButton exitB = new JButton("나가기");
+        LineBorder LB = new LineBorder(Color.WHITE);
         
-        ButtonP.add(StartB);
-        ButtonP.add(configB);
-        ButtonP.add(ScoreBoardB);
-        ButtonP.add(ExitB);
 
-        ButtonP.setBackground(new Color(255, 0, 0, 0));
+        buttonP.setSize(100, 300);
+        buttonP.setLocation(200, 400);
+        buttonP.setBackground(new Color(255, 0, 0, 0));
+        buttonP.setLayout(new GridLayout(4, 1, 10, 10));
+        startB.setBackground(Color.BLACK);
+        startB.setForeground(Color.WHITE);
+        startB.setBorder(LB);
+        scoreboardB.setForeground(Color.WHITE);
+        scoreboardB.setBackground(Color.black);
+        scoreboardB.setBorder(LB);
+        configB.setBackground(Color.BLACK);
+        configB.setForeground(Color.WHITE);
+        configB.setBorder(LB);
+        exitB.setBackground(Color.BLACK);
+        exitB.setForeground(Color.WHITE);
+        exitB.setBorder(LB);
+        buttonP.add(startB);
+        buttonP.add(scoreboardB);
+        buttonP.add(configB);
+        buttonP.add(exitB);
 
-        ScoreBoardB.addActionListener(new ActionListener(){
+        emptyP1.setBackground(new Color(255, 0, 0, 0));
+        emptyP2.setBackground(new Color(255, 0, 0, 0));
+        emptyP3.setPreferredSize(new Dimension(0, (int)(HEIGHT*0.5)));
+
+        mainP.setLayout(new BorderLayout(150, 0));
+        mainP.setSize(500, 700);
+        mainP.setBackground(Color.BLACK);
+        mainP.add(buttonP, BorderLayout.CENTER);
+        mainP.add(emptyP1, BorderLayout.EAST);
+        mainP.add(emptyP2, BorderLayout.WEST);
+        mainP.add(emptyP3, BorderLayout.NORTH);
+
+        scoreboardB.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 new ScoreBoardFrame();
             }
         });
         configB.addActionListener(MouseListener.configFrameMove);
-        ExitB.addActionListener(MouseListener.ExitListener);
-    }
-    public StartFrame(){
-        JPanel ButtonP = new JPanel();
-        buttonPanel(ButtonP);
-        add(ButtonP);
-        setVisible(true);
+        exitB.addActionListener(MouseListener.ExitListener);
+
+        add(mainP);
     }
     
     public static void main(String[] args){
-        new StartFrame();
+        new startFrame();
     }
 }

@@ -6,11 +6,11 @@ import java.awt.event.*;
 
 public class ScoreBoardFrame extends SimpleJFrame{
     public ScoreBoardFrame(){
-        String[] header = {"Name", "EndTime", "Score"};
+        String[] header = {"순위", "이름", "점수", "난이도"};
         String[][] contents = {
-            {"엄태욱", "100", "200"},
-            {"고민혁", "90", "180"},
-            {"박지찬", "80", "170"}
+            {"엄태욱", "100", "200", "어려움"},
+            {"고민혁", "90", "180", "보통"},
+            {"박지찬", "80", "170", "쉬움"}
         };
 
         JPanel buttonPanel = new JPanel();
@@ -36,7 +36,6 @@ public class ScoreBoardFrame extends SimpleJFrame{
         add(buttonPanel);
         add(JSP);
 
-        setVisible(true);
     }
 
     public static void main(String[] args){

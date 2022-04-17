@@ -11,14 +11,14 @@ import java.awt.event.*;
 import java.awt.*;
 
 public class ConfigFrame extends SimpleJFrame{
+    public JPanel configP = new JPanel();
     public ConfigFrame(){
         setTitle("설정 창");
 
         JPanel ButtonPanel = new JPanel();
         JPanel ConfigPanel = new JPanel();
-        JPanel mainP = new JPanel();
 
-        mainPanel(mainP, ConfigPanel, ButtonPanel);
+        mainPanel(configP, ConfigPanel, ButtonPanel);
         configPanel(ConfigPanel);
         buttonPanel(ButtonPanel);
 
@@ -26,7 +26,7 @@ public class ConfigFrame extends SimpleJFrame{
     }
 
     public void mainPanel(JPanel mainP, JPanel ConfigPanel, JPanel ButtonPanel){
-        mainP.setSize(new Dimension(500, 300));
+        mainP.setSize(new Dimension(700, 500));
         mainP.setBackground(Color.BLACK);
         mainP.setLayout(new GridLayout(0, 1, 10, 10));
         mainP.add(ConfigPanel);
@@ -55,7 +55,6 @@ public class ConfigFrame extends SimpleJFrame{
         ConfigPanel.add(ColorSetBox);
         ConfigPanel.setLayout(new GridLayout(2, 0, 0, 10));
     }
-
     public void buttonPanel(JPanel buttonPanel){
         
         JButton SaveB = new JButton("저장");

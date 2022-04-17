@@ -6,20 +6,19 @@ import java.awt.*;
 
 public class SimpleJFrame extends JFrame{
     private JFrame jFrame;
-    private Image background = new ImageIcon(SimpleJFrame.class.getResource("start_image.png")).getImage();
-    public int HEIGHT = 700;
-    public int WIDTH = 500;
+    public int HEIGHT;
+    public int WIDTH;
     public SimpleJFrame(){
+        HEIGHT = 700;
+        WIDTH = 500;
+
+        Dimension Dim = new Dimension(WIDTH, HEIGHT);
         setTitle("Tetris");
-        setSize(WIDTH, HEIGHT);
+        setSize(Dim);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setBackground(new Color(12, 25, 53));
         setVisible(true);
-    }
-    public void paint(Graphics g){
-        g.drawImage(background, 0, 0, WIDTH, HEIGHT, this);
     }
     public SimpleJFrame(WindowSize windowSize) {
         setTitle("Tetris");
