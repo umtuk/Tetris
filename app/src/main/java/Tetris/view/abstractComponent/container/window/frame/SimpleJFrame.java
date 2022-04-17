@@ -6,7 +6,8 @@ import java.awt.*;
 
 public class SimpleJFrame extends JFrame{
     private JFrame jFrame;
-    public int HEIGHT = 300;
+    private Image background = new ImageIcon(SimpleJFrame.class.getResource("start_image.png")).getImage();
+    public int HEIGHT = 700;
     public int WIDTH = 500;
     public SimpleJFrame(){
         setTitle("Tetris");
@@ -14,18 +15,22 @@ public class SimpleJFrame extends JFrame{
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setBackground(new Color(12, 25, 53));
         setVisible(true);
     }
+    public void paint(Graphics g){
+        g.drawImage(background, 0, 0, WIDTH, HEIGHT, this);
+    }
     public SimpleJFrame(WindowSize windowSize) {
-        //제목, 크기
         setTitle("Tetris");
         this.jFrame.setSize(windowSize.getWidth(), windowSize.getHeight());
 
-        //우측 상단에 X버튼을 누르면 종료
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         setVisible(true);
     }
-
+    public static void main(String[] args){
+        new SimpleJFrame();
+    }
 }
