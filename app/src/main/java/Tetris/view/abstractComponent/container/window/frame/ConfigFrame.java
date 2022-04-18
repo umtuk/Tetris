@@ -10,67 +10,77 @@ import Tetris.view.actionListener.MouseListener;
 import java.awt.event.*;
 import java.awt.*;
 
-public class ConfigFrame extends SimpleJFrame{
+public class ConfigFrame{
     public JPanel configP = new JPanel();
-    public ConfigFrame(){
-        setTitle("설정 창");
-
-        JPanel ButtonPanel = new JPanel();
-        JPanel ConfigPanel = new JPanel();
-
-        mainPanel(configP, ConfigPanel, ButtonPanel);
-        configPanel(ConfigPanel);
-        buttonPanel(ButtonPanel);
-
-        setVisible(true);
-    }
-
-    public void mainPanel(JPanel mainP, JPanel ConfigPanel, JPanel ButtonPanel){
-        mainP.setSize(new Dimension(700, 500));
-        mainP.setBackground(Color.BLACK);
-        mainP.setLayout(new GridLayout(0, 1, 10, 10));
-        mainP.add(ConfigPanel);
-        mainP.add(ButtonPanel);
-        add(mainP);
-    }
-    public void configPanel(JPanel ConfigPanel){
-        ConfigPanel.setSize(new Dimension(10, 200));
-        ConfigPanel.setLayout(new GridLayout(0, 2, 10, 20));
+    public JButton initB = new JButton("초기화");
+    public JButton saveB = new JButton("저장");
+    public JButton exitB = new JButton("나가기");
+    public ConfigFrame(){}
+    public ConfigFrame(int WIDTH, int HEIGHT){
+        JPanel con = new JPanel();
+        JLabel text = new JLabel("설정", JLabel.CENTER);
+        JPanel buttonP = new JPanel();
+        JLabel windowSizeL = new JLabel("해상도");
+        JLabel colorSetL = new JLabel("모드");
+        JLabel difficultyL = new JLabel("난이도");
+        /*
+        JLabel up = new JLabel("위");
+        JLabel down = new JLabel("아래");
+        JLabel left = new JLabel("왼쪽");
+        JLabel right = new JLabel("오른쪽");
+        JLabel ok = new JLabel("확인");
+        JLabel pause = new JLabel("일시정지");
+        JLabel rotate = new JLabel("회전");
+        */
         WindowSize[] windowSize = WindowSize.values();
         ColorSet[] colorSets = ColorSet.values();
-        
-        JComboBox<String> WindowSizeBox = new JComboBox(windowSize);
-        JComboBox<String> ColorSetBox = new JComboBox(colorSets);
 
-        JLabel lb_WindowSize = new JLabel("창 크기");
-        JLabel lb_ColorSet = new JLabel("색 모드");
+        JComboBox<String> windowSizeCB = new JComboBox(windowSize);
+        JComboBox<String> colorSetCB = new JComboBox(colorSets);
+        //JComboBox difficultyCB = new JComboBox();
 
-        lb_WindowSize.setHorizontalAlignment(JLabel.CENTER);
-        lb_ColorSet.setHorizontalAlignment(JLabel.CENTER);
+        windowSizeCB.setBackground(Color.BLACK);
+        colorSetCB.setBackground(Color.BLACK);
+        windowSizeCB.setForeground(Color.WHITE);
+        colorSetCB.setForeground(Color.WHITE);
 
-        ConfigPanel.add(lb_WindowSize);
-        ConfigPanel.add(WindowSizeBox);
+        windowSizeL.setForeground(Color.WHITE);
+        colorSetL.setForeground(Color.WHITE);
+        difficultyL.setForeground(Color.WHITE);
 
-        ConfigPanel.add(lb_ColorSet);
-        ConfigPanel.add(ColorSetBox);
-        ConfigPanel.setLayout(new GridLayout(2, 0, 0, 10));
-    }
-    public void buttonPanel(JPanel buttonPanel){
-        
-        JButton SaveB = new JButton("저장");
-        JButton CancleB = new JButton("나가기");
-        JButton InitB = new JButton("초기화");
+        con.setLayout(new GridLayout(0, 2, 20, 30));
+        con.setBackground(Color.BLACK);
+        con.add(windowSizeL);
+        con.add(windowSizeCB);
+        con.add(colorSetL);
+        con.add(colorSetCB);
+        con.add(difficultyL);
+        //configSP.add(difficultyCB);
+        /*
+        keymap
+        */
 
-        buttonPanel.add(InitB);
-        buttonPanel.add(SaveB);
-        buttonPanel.add(CancleB);
+        buttonP.setBackground(Color.BLACK);
+        buttonP.add(initB);
+        buttonP.add(saveB);
+        buttonP.add(exitB);
 
-        CancleB.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                dispose();
-            }
-        });
+        initB.setForeground(Color.WHITE);
+        initB.setBackground(Color.BLACK);
+        saveB.setForeground(Color.WHITE);
+        saveB.setBackground(Color.BLACK);
+        exitB.setForeground(Color.WHITE);
+        exitB.setBackground(Color.BLACK);
+
+        text.setForeground(Color.WHITE);
+        text.setBackground(Color.BLACK);
+        text.setFont(new Font("Serif", Font.BOLD, 30));
+
+        configP.setLayout(new BorderLayout());
+        configP.add(text, BorderLayout.NORTH);
+        configP.add(con, BorderLayout.WEST);
+        configP.add(buttonP, BorderLayout.SOUTH);
+        configP.setBackground(Color.BLACK);
     }
 
     public static void main(String[] args){

@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SimpleJFrame extends JFrame{
-    private JFrame jFrame;
+    public JFrame jFrame;
     public int HEIGHT;
     public int WIDTH;
     public SimpleJFrame(){
