@@ -10,13 +10,13 @@ import Tetris.view.actionListener.MouseListener;
 import java.awt.event.*;
 import java.awt.*;
 
-public class ConfigFrame{
+public class ConfigPanel{
     public JPanel configP = new JPanel();
     public JButton initB = new JButton("초기화");
     public JButton saveB = new JButton("저장");
     public JButton exitB = new JButton("나가기");
-    public ConfigFrame(){}
-    public ConfigFrame(int WIDTH, int HEIGHT){
+    public ConfigPanel(){}
+    public ConfigPanel(int WIDTH, int HEIGHT){
         JPanel con = new JPanel();
         JLabel text = new JLabel("설정", JLabel.CENTER);
         JPanel buttonP = new JPanel();
@@ -84,6 +84,6 @@ public class ConfigFrame{
     }
 
     public static void main(String[] args){
-        new ConfigFrame();
+        new ConfigPanel();
     }
 }

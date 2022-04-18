@@ -4,11 +4,11 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import java.awt.*;
 
-public class ScoreBoardFrame{
+public class ScoreBoardPanel{
     public JPanel scoreboardP = new JPanel();
     public JButton exitB = new JButton("나가기");
-    public ScoreBoardFrame(){}
-    public ScoreBoardFrame(int WIDTH, int HEIGHT){
+    public ScoreBoardPanel(){}
+    public ScoreBoardPanel(int WIDTH, int HEIGHT){
         String[] header = {"순위", "이름", "점수", "난이도"};
         String[][] contents = {
             {"엄태욱", "100", "200", "어려움"},
@@ -114,7 +114,7 @@ public class ScoreBoardFrame{
     }
     public static void main(String[] args){
         SimpleJFrame F = new SimpleJFrame();
-        ScoreBoardFrame S = new ScoreBoardFrame(F.WIDTH, F.HEIGHT);
+        ScoreBoardPanel S = new ScoreBoardPanel(F.WIDTH, F.HEIGHT);
         F.add(S.scoreboardP);
         S.scoreboardP.setVisible(true);
     }

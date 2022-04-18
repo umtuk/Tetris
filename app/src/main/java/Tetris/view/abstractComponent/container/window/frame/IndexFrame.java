@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import Tetris.view.actionListener.MouseListener;
 
-public class startFrame{
+public class IndexFrame{
     public JPanel mainP = new JPanel();
     JPanel buttonP = new JPanel();
     JPanel emptyP1 = new JPanel();
@@ -19,10 +19,10 @@ public class startFrame{
     JButton exitB = new JButton("나가기");
     LineBorder LB = new LineBorder(Color.WHITE);
     
-    public startFrame(){}
-    public startFrame(int W, int H){
+    public IndexFrame(){}
+    public IndexFrame(int W, int H){
         emptyP3 = new JPanel(){
-        Image background = new ImageIcon(startFrame.class.getResource("tetris_image.jpg")).getImage();
+        Image background = new ImageIcon(IndexFrame.class.getResource("tetris_image.jpg")).getImage();
             public void paint(Graphics g){
                 g.drawImage(background, (int)(W/2)-210, 100, null);
             }
@@ -65,6 +65,6 @@ public class startFrame{
     }
     
     public static void main(String[] args){
-        new startFrame(500, 700);
+        new IndexFrame(500, 700);
     }
 }
