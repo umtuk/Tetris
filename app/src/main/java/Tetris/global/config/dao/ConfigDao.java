@@ -29,7 +29,7 @@ public class ConfigDao {
     }
 
     private final SimpleSQLite simpleSQLite;
-    private final MainConfig mainConfig;
+    private MainConfig mainConfig;
 
     private EnumMap<KeyType, String> keyType2Column;
 

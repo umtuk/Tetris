@@ -41,6 +41,10 @@ public class SimpleSQLite {
         pstmt.setInt(parameterIndex, x);
     }
 
+    private void pstmtSetLong(int parameterIndex, Long x) throws SQLException {
+        pstmt.setLong(parameterIndex, x);
+    }
+
     private void pstmtSetString(int parameterIndex, String x) throws SQLException {
         pstmt.setString(parameterIndex, x);
     }
@@ -52,6 +56,8 @@ public class SimpleSQLite {
                 pstmtSetInt(i + 1, (Integer) parameters[i]);
             else if (parameters[i] instanceof String)
                 pstmtSetString(i + 1, (String) parameters[i]);
+            else if (parameters[i] instanceof Long)
+                pstmtSetLong(i + 1, (Long) parameters[i]);
         }
     }
 

@@ -9,7 +9,15 @@ import Tetris.global.config.entity.MainConfig;
 import java.sql.SQLException;
 
 public class ConfigService {
-    private static ConfigService INSTANCE = new ConfigService();
+    private static ConfigService INSTANCE;
+
+    static {
+        try {
+            INSTANCE = new ConfigService();
+        } catch (SQLException e) {
+            
+        }
+    }
 
     public static ConfigService getInstance() {
         return INSTANCE;
@@ -18,9 +26,11 @@ public class ConfigService {
     private MainConfig mainConfig;
     private ConfigDao configDao;
 
-    public ConfigService() {
+    public ConfigService() throws SQLException {
         mainConfig = MainConfig.getInstance();
         configDao = ConfigDao.getInstance();
+
+        configDao.setMainConfig(configDao.read());
     }
     
     public void setWindowSize(WindowSize windowSize) throws SQLException {
@@ -41,9 +51,5 @@ public class ConfigService {
     public void setDefaultConfig() throws SQLException {
         mainConfig.setDefault();
         configDao.update();
-    }
-
-    public void clearScoreBoard() {
-        // Todo
     }
 }
