@@ -3,11 +3,7 @@ package Tetris.view.abstractComponent.container.window.frame;
 import javax.swing.*;
 
 import Tetris.global.config.constant.ColorSet;
-import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
-import Tetris.view.actionListener.ActionEvent;
-import Tetris.view.actionListener.MouseListener;
-import java.awt.event.*;
 import java.awt.*;
 
 public class ConfigPanel{
