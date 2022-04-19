@@ -5,6 +5,8 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import Tetris.view.actionListener.KeyListeners;
 import Tetris.view.actionListener.MouseListener;
 
 public class IndexFrame{
@@ -18,6 +20,8 @@ public class IndexFrame{
     JButton configB = new JButton("설정");
     JButton exitB = new JButton("나가기");
     LineBorder LB = new LineBorder(Color.WHITE);
+    KeyListeners KL = new KeyListeners();
+    
     
     public IndexFrame(){}
     public IndexFrame(int W, int H){
@@ -65,6 +69,9 @@ public class IndexFrame{
     }
     
     public static void main(String[] args){
-        new IndexFrame(500, 700);
+        SimpleJFrame F = new SimpleJFrame();
+        IndexFrame a = new IndexFrame(500, 700);
+        F.add(a.mainP);
+        F.setVisible(true);
     }
 }

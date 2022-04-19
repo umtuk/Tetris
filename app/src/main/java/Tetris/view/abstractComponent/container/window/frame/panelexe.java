@@ -10,13 +10,13 @@ import Tetris.view.actionListener.MouseListener;
 public class panelexe {
     public static void main(String[] args){
         SimpleJFrame F = new SimpleJFrame();
-        startFrame startP = new startFrame(F.WIDTH, F.HEIGHT);
-        ScoreBoardFrame scoreP = new ScoreBoardFrame(F.WIDTH, F.HEIGHT);
-        ConfigFrame config = new ConfigFrame(F.WIDTH, F.HEIGHT);
+        IndexFrame startP = new IndexFrame(F.WIDTH, F.HEIGHT);
+        ScoreBoardPanel scoreP = new ScoreBoardPanel(F.WIDTH, F.HEIGHT);
+        ConfigPanel config = new ConfigPanel(F.WIDTH, F.HEIGHT);
 
         F.add(startP.mainP);
-        F.add(scoreP.scoreboardP);
         F.add(config.configP);
+        F.add(scoreP.scoreboardP);
         startP.mainP.setVisible(true);
         scoreP.scoreboardP.setVisible(false);
         config.configP.setVisible(false);

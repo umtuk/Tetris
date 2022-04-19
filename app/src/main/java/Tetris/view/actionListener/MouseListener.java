@@ -14,13 +14,13 @@ public class MouseListener{
     public static ActionListener configFrameMove = new ActionListener(){
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
-            new ConfigFrame();
+            
         }
     };
     public static ActionListener ScoreBoardListener = new ActionListener(){
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e){
-            new ScoreBoardFrame();
+            
         }
     };
 }
