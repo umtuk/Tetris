@@ -25,10 +25,9 @@ public class BoardServiceTest {
 
     @Test
     void testCountFullLine() {
-        Board board = new Board();
-        boardService.init(board);
+        boardService.init();
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
         for (int r = 23; r < 24; r++) {
             for (int c = 0; c < 10; c++) {
                 tBoard[r][c][Board.TYPE] = Board.TYPE_STATIC;
@@ -48,7 +47,7 @@ public class BoardServiceTest {
         expected[23][0][Board.TYPE] = Board.TYPE_STATIC;
         expected[23][0][Board.COLOR] = BaseColor.BLUE.getColor();
 
-        int count = boardService.countFullLine(board);
+        int count = boardService.countFullLine();
         assertTrue(count == 1);
         assertTrue(Arrays.deepEquals(tBoard, expected));
 
@@ -65,7 +64,7 @@ public class BoardServiceTest {
             }
         }
 
-        count = boardService.countFullLine(board);
+        count = boardService.countFullLine();
         assertTrue(count == 2);
         assertTrue(Arrays.deepEquals(tBoard, expected));
 
@@ -82,7 +81,7 @@ public class BoardServiceTest {
             }
         }
 
-        count = boardService.countFullLine(board);
+        count = boardService.countFullLine();
         assertTrue(count == 3);
         assertTrue(Arrays.deepEquals(tBoard, expected));
 
@@ -93,7 +92,7 @@ public class BoardServiceTest {
             }
         }
 
-        count = boardService.countFullLine(board);
+        count = boardService.countFullLine();
         assertTrue(count == 4);
         assertTrue(Arrays.deepEquals(tBoard, expected));
         
@@ -122,43 +121,43 @@ public class BoardServiceTest {
         expected[23][0][Board.TYPE] = Board.TYPE_STATIC;
         expected[23][0][Board.COLOR] = BaseColor.BLUE.getColor();
 
-        count = boardService.countFullLine(board);
+        count = boardService.countFullLine();
         assertTrue(count == 4);
         assertTrue(Arrays.deepEquals(tBoard, expected));
     }
 
     @Test
     void testGetBoard() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
 
-        assertTrue(tBoard.equals(board.getBoard()));
+        assertTrue(tBoard.equals(boardService.getBoard()));
     }
 
     @Test
     void testGetNowBlock() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        Block prev = board.getNowBlock();
+        Block prev = boardService.getNowBlock();
 
-        assertTrue(prev.equals(board.getNowBlock()));
+        assertTrue(prev.equals(boardService.getNowBlock()));
     }
 
     @Test
     void testGetNowBlockPos() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
         Block iBlock = new IBlock(ColorSet.DEFAULT);
-        board.setNowBlock(iBlock);
+        boardService.setNowBlock(iBlock);
 
-        board.setxPos(5);
-        board.setyPos(5);
+        boardService.setxPos(5);
+        boardService.setyPos(5);
 
-        int[][] nowBlockPos = boardService.getNowBlockPos(board);
+        int[][] nowBlockPos = boardService.getNowBlockPos();
 
         assertTrue(nowBlockPos[0][0] == 5);
         assertTrue(nowBlockPos[1][0] == 5);
@@ -171,12 +170,12 @@ public class BoardServiceTest {
         assertTrue(nowBlockPos[3][1] == 7);
 
         Block zBlock = new ZBlock(ColorSet.DEFAULT);
-        board.setNowBlock(zBlock);
+        boardService.setNowBlock(zBlock);
 
-        board.setxPos(7);
-        board.setyPos(7);
+        boardService.setxPos(7);
+        boardService.setyPos(7);
 
-        nowBlockPos = boardService.getNowBlockPos(board);
+        nowBlockPos = boardService.getNowBlockPos();
 
         assertTrue(nowBlockPos[0][0] == 7);
         assertTrue(nowBlockPos[1][0] == 7);
@@ -191,8 +190,8 @@ public class BoardServiceTest {
 
     @Test
     void testInit() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
         int[][][] expected = new int[24][10][2];
         for (int i = 0; i < 24; i++ ) {
@@ -202,21 +201,21 @@ public class BoardServiceTest {
             }
         }
 
-        Arrays.deepEquals(expected, board.getBoard());
+        Arrays.deepEquals(expected, boardService.getBoard());
 
-        Block now = board.getNowBlock();
+        Block now = boardService.getNowBlock();
         assertTrue(now.getShape() != null);
 
-        Block next = board.getPrevBlock();
+        Block next = boardService.getPrevBlock();
         assertTrue(next.getShape() != null);
     }
 
     @Test
     void testIsDead() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
 
         for (int i = 4; i < 24; i++) {
             for (int j = 0; j < 10; j++) {
@@ -225,18 +224,18 @@ public class BoardServiceTest {
             }
         }
 
-        assertTrue(!boardService.isDead(board));
+        assertTrue(!boardService.isDead());
 
         tBoard[3][0][0] = Board.TYPE_STATIC;
-        assertTrue(boardService.isDead(board));
+        assertTrue(boardService.isDead());
     }
 
     @Test
     void testMoveBlockAtOnce() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
         for (int r = 20; r < 24; r++) {
             for (int c = 0; c < 10; c++) {
                 if (c != 3) {
@@ -266,22 +265,21 @@ public class BoardServiceTest {
         expected[20][3][1] = BlockColorMap.getColor(ColorSet.DEFAULT, BlockType.IBLOCK);
 
         Block iBlock = new IBlock(ColorSet.DEFAULT);
-        board.setNowBlock(iBlock);
-        board.setxPos(3);
-        board.setyPos(3);
+        boardService.setNowBlock(iBlock);
+        boardService.setxPos(3);
+        boardService.setyPos(3);
         iBlock.setShape(IntMatrixUtil.rotateClockwise(iBlock.getShape()));
 
-        boardService.moveBlockAtOnce(board);
+        boardService.moveBlockAtOnce();
 
         assertTrue(Arrays.deepEquals(tBoard, expected));
 
 
-        boardService.init(board);
-        board.setNowBlock(new IBlock(ColorSet.DEFAULT));
-        board.setxPos(3);
-        board.setyPos(3);
+        boardService.init();
+        boardService.setNowBlock(new IBlock(ColorSet.DEFAULT));
+        boardService.setxPos(3);
+        boardService.setyPos(3);
 
-        System.out.println();
         for (int r = 20; r < 24; r++) {
             for (int c = 0; c < 10; c++) {
                 if (c != 3) {
@@ -311,17 +309,17 @@ public class BoardServiceTest {
             expected[19][c][1] = BlockColorMap.getColor(ColorSet.DEFAULT, BlockType.IBLOCK);
         }
 
-        boardService.moveBlockAtOnce(board);
+        boardService.moveBlockAtOnce();
 
         assertTrue(Arrays.deepEquals(tBoard, expected));
     }
 
     @Test
     void testMoveBlockDown() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
         for (int r = 20; r < 24; r++) {
             for (int c = 0; c < 10; c++) {
                 if (c != 3) {
@@ -351,25 +349,24 @@ public class BoardServiceTest {
         expected[20][3][1] = BlockColorMap.getColor(ColorSet.DEFAULT, BlockType.IBLOCK);
 
         Block iBlock = new IBlock(ColorSet.DEFAULT);
-        board.setNowBlock(iBlock);
-        board.setxPos(3);
-        board.setyPos(3);
+        boardService.setNowBlock(iBlock);
+        boardService.setxPos(3);
+        boardService.setyPos(3);
         iBlock.setShape(IntMatrixUtil.rotateClockwise(iBlock.getShape()));
 
-        boardService.moveBlockDown(board);
+        boardService.moveBlockDown();
 
-        assertTrue(board.getxPos() == 4);
-        assertTrue(board.getyPos() == 3);
+        assertTrue(boardService.getxPos() == 4);
+        assertTrue(boardService.getyPos() == 3);
 
-        board.setxPos(21);
-
-        boardService.moveBlockDown(board);
+        boardService.setxPos(21);
+        boardService.moveBlockDown();
 
         assertTrue(Arrays.deepEquals(tBoard, expected));
 
-        board.setNowBlock(new IBlock(ColorSet.DEFAULT));
-        board.setxPos(19);
-        board.setyPos(3);
+        boardService.setNowBlock(new IBlock(ColorSet.DEFAULT));
+        boardService.setxPos(19);
+        boardService.setyPos(3);
 
         expected[19][2][0] = Board.TYPE_STATIC;
         expected[19][3][0] = Board.TYPE_STATIC;
@@ -381,65 +378,65 @@ public class BoardServiceTest {
         expected[19][4][1] = BlockColorMap.getColor(ColorSet.DEFAULT, BlockType.IBLOCK);
         expected[19][5][1] = BlockColorMap.getColor(ColorSet.DEFAULT, BlockType.IBLOCK);
 
-        boardService.moveBlockDown(board);
+        boardService.moveBlockDown();
 
         assertTrue(Arrays.deepEquals(tBoard, expected));
     }
 
     @Test
     void testMoveBlockLeft() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        board.setNowBlock(new IBlock(ColorSet.DEFAULT));
-        board.setxPos(3);
-        board.setyPos(1);
+        boardService.setNowBlock(new IBlock(ColorSet.DEFAULT));
+        boardService.setxPos(3);
+        boardService.setyPos(1);
 
-        boardService.moveBlockLeft(board);
+        boardService.moveBlockLeft();
 
-        assertSame(board.getxPos(), 3);
-        assertSame(board.getyPos(), 1);
+        assertSame(boardService.getxPos(), 3);
+        assertSame(boardService.getyPos(), 1);
 
-        board.setyPos(5);
+        boardService.setyPos(5);
 
-        boardService.moveBlockLeft(board);
+        boardService.moveBlockLeft();
 
-        assertSame(board.getxPos(), 3);
-        assertSame(board.getyPos(), 4);
+        assertSame(boardService.getxPos(), 3);
+        assertSame(boardService.getyPos(), 4);
     }
 
     @Test
     void testMoveBlockRight() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        board.setNowBlock(new IBlock(ColorSet.DEFAULT));
-        board.setxPos(3);
-        board.setyPos(1);
+        boardService.setNowBlock(new IBlock(ColorSet.DEFAULT));
+        boardService.setxPos(3);
+        boardService.setyPos(1);
 
-        boardService.moveBlockRight(board);
+        boardService.moveBlockRight();
 
-        assertSame(board.getxPos(), 3);
-        assertSame(board.getyPos(), 2);
+        assertSame(boardService.getxPos(), 3);
+        assertSame(boardService.getyPos(), 2);
 
-        board.setyPos(8);
+        boardService.setyPos(8);
 
-        boardService.moveBlockRight(board);
+        boardService.moveBlockRight();
 
-        assertSame(board.getxPos(), 3);
-        assertSame(board.getyPos(), 8);
+        assertSame(boardService.getxPos(), 3);
+        assertSame(boardService.getyPos(), 8);
     }
 
     @Test
     void testRotate() {
-        Board board = new Board();
-        boardService.init(board);
+        
+        boardService.init();
 
-        board.setNowBlock(new IBlock(ColorSet.DEFAULT));
-        board.setxPos(3);
-        board.setyPos(2);
+        boardService.setNowBlock(new IBlock(ColorSet.DEFAULT));
+        boardService.setxPos(3);
+        boardService.setyPos(2);
 
-        boardService.rotate(board);
+        boardService.rotate();
 
         int[][] expected = {
             {1},
@@ -448,9 +445,9 @@ public class BoardServiceTest {
             {1},
         };
 
-        assertTrue(Arrays.deepEquals(board.getNowBlock().getShape(), expected));
+        assertTrue(Arrays.deepEquals(boardService.getNowBlock().getShape(), expected));
 
-        int[][][] tBoard = board.getBoard();
+        int[][][] tBoard = boardService.getBoard();
 
         for (int r = 20; r  <24; r++) {
             for (int c = 0; c < 10; c++) {
@@ -459,13 +456,13 @@ public class BoardServiceTest {
             }
         }
 
-        boardService.rotate(board);
-        board.setxPos(19);
-        board.setyPos(1);
+        boardService.rotate();
+        boardService.setxPos(19);
+        boardService.setyPos(1);
 
-        boardService.rotate(board);
+        boardService.rotate();
 
-        int[][] nowBoardPos = boardService.getNowBlockPos(board);
+        int[][] nowBoardPos = boardService.getNowBlockPos();
 
         for (int i = 0; i < 4; i++) {
             assertSame(tBoard[nowBoardPos[i][0]][nowBoardPos[i][1]][0], Board.TYPE_EMPTY);

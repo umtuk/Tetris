@@ -1,8 +1,11 @@
 package Tetris.domain.score.entity;
 
 import Tetris.global.config.constant.Difficulty;
+import Tetris.global.config.entity.MainConfig;
 
 public class Score {
+
+    private static MainConfig mainConfig = MainConfig.getInstance();
     
     private int id;
     
@@ -28,6 +31,10 @@ public class Score {
 
     public Score(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public Score() {
+        this(mainConfig.getDifficulty());
     }
 
     public String getUsername() {

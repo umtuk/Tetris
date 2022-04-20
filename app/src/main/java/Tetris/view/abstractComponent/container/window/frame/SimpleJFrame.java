@@ -4,11 +4,14 @@ import javax.swing.JFrame;
 
 import Tetris.global.config.constant.WindowSize;
 
-public class SimpleJFrame {
-    
-    private JFrame jFrame;
+public class SimpleJFrame extends JFrame {
 
     public SimpleJFrame(WindowSize windowSize) {
-        this.jFrame.setSize(windowSize.getWidth(), windowSize.getHeight());
+        setSize(windowSize.getWidth(), windowSize.getHeight());
+    
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        setVisible(true);
     }
 }

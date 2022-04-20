@@ -37,11 +37,6 @@ public class BlockService {
         Difficulty diff = mainConfig.getDifficulty();
         BlockType[] blockTypes = BlockType.values();
 
-        System.out.println(diff);
-
-        for (int i = 0; i < blockTypes.length; i++)
-            System.out.println(blockTypes[i]);
-
         sumOfFitness = 0;
         previousProbability = new double[blockTypes.length];
 

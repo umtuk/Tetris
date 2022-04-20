@@ -20,7 +20,7 @@ public class ScoreDao {
         try {
             INSTANCE = new ScoreDao();
         } catch (SQLException e) {
-            //TODO: handle exception
+            
         }
     }
 
@@ -132,17 +132,5 @@ public class ScoreDao {
 
     public void deleteAll() throws SQLException {
         simpleSQLite.deleteFromWhere(table, "TRUE");
-    }
-
-    
-    public static void main(String[] args) throws SQLException {
-        ScoreDao scoreDao = ScoreDao.getInstance();
-
-        scoreDao.deleteAll();
-
-        List<Score> scores = scoreDao.readAll();
-
-        for (Score score : scores)
-            System.out.println(score.getId());
     }
 }
