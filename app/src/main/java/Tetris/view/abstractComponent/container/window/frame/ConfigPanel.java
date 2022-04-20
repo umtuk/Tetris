@@ -2,17 +2,18 @@ package Tetris.view.abstractComponent.container.window.frame;
 
 import javax.swing.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import Tetris.global.config.constant.ColorSet;
 import Tetris.global.config.constant.WindowSize;
 import java.awt.*;
 
-public class ConfigPanel{
+public class ConfigPanel extends SimpleJFrame{
     public JPanel configP = new JPanel();
     public JButton initB = new JButton("초기화");
     public JButton saveB = new JButton("저장");
     public JButton exitB = new JButton("나가기");
-    public ConfigPanel(){}
-    public ConfigPanel(int WIDTH, int HEIGHT){
+    public ConfigPanel(){
         JPanel con = new JPanel();
         JLabel text = new JLabel("설정", JLabel.CENTER);
         JPanel buttonP = new JPanel();
@@ -77,9 +78,20 @@ public class ConfigPanel{
         configP.add(con, BorderLayout.WEST);
         configP.add(buttonP, BorderLayout.SOUTH);
         configP.setBackground(Color.BLACK);
+        add(configP);
+        setVisible(true);
+        System.out.println("설정화면 구성 완료");
+        exitB.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                dispose();
+                new IndexFrame();
+            }
+        });
     }
 
     public static void main(String[] args){
         new ConfigPanel();
+        System.out.println("설정화면");
     }
 }

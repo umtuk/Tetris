@@ -2,13 +2,14 @@ package Tetris.view.abstractComponent.container.window.frame;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 
-public class ScoreBoardPanel{
+public class ScoreBoardPanel extends SimpleJFrame{
     public JPanel scoreboardP = new JPanel();
     public JButton exitB = new JButton("나가기");
-    public ScoreBoardPanel(){}
-    public ScoreBoardPanel(int WIDTH, int HEIGHT){
+    public ScoreBoardPanel(){
         String[] header = {"순위", "이름", "점수", "난이도"};
         String[][] contents = {
             {"엄태욱", "100", "200", "어려움"},
@@ -111,11 +112,18 @@ public class ScoreBoardPanel{
         scoreboardP.add(text, BorderLayout.NORTH);
         scoreboardP.add(JSP, BorderLayout.CENTER);
         scoreboardP.add(exitB, BorderLayout.SOUTH);
+        
+        exitB.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                dispose();
+                new IndexFrame();
+            }
+        });
+        add(scoreboardP);
+        setVisible(true);
     }
     public static void main(String[] args){
-        SimpleJFrame F = new SimpleJFrame();
-        ScoreBoardPanel S = new ScoreBoardPanel(F.WIDTH, F.HEIGHT);
-        F.add(S.scoreboardP);
-        S.scoreboardP.setVisible(true);
+        new ScoreBoardPanel();
     }
 }

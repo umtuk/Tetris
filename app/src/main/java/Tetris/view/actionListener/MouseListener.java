@@ -1,8 +1,5 @@
 package Tetris.view.actionListener;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import Tetris.view.abstractComponent.container.window.frame.*;
 
 public class MouseListener{
     public static ActionListener ExitListener = new ActionListener(){
