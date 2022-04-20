@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
 import Tetris.domain.board.constant.BoardComponent;
 import Tetris.domain.board.constant.map.BoardColorMap;
 import Tetris.domain.score.entity.Score;
@@ -17,7 +21,7 @@ public class ScoreBoardJPanel extends JPanel {
     private JLabel name;
     private JLabel score;
 
-    private Score scoreObject;
+    private ScoreService scoreService;
 
     public ScoreBoardJPanel() {
         initObjects();
@@ -27,13 +31,12 @@ public class ScoreBoardJPanel extends JPanel {
     }
 
     private void initObjects() {
-        scoreObject = new Score();
+        scoreService = ScoreService.getInstance();
     }
 
     private void initPanel() {
         setBackground(new Color(BoardColorMap.getColor(BoardComponent.EMPTY)));
-        //setPreferredSize(new Dimension(160, 160));
-        setSize(160, 160);
+        setPreferredSize(new Dimension(160, 160));
     }
 
     private void initLabels() {
@@ -52,6 +55,10 @@ public class ScoreBoardJPanel extends JPanel {
     }
 
     public void updateLabels() {
-        score.setText(scoreObject.getScore() + "");
+        score.setText(scoreService.getScore().getScore() + "");
+    }
+
+    public void initScore() {
+        scoreService.init();
     }
 }

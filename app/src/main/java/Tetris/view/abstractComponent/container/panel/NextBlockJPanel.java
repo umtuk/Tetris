@@ -26,11 +26,11 @@ public class NextBlockJPanel extends JPanel {
     }
 
     private int squareWidth() {
-        return (int) getSize().getWidth() / boardService.getPrevBlock().getShape()[0].length;
+        return (int) getSize().getWidth() / 4;
     }
 
     private int squareHeight() {
-        return (int) getSize().getHeight() / boardService.getPrevBlock().getShape().length;
+        return (int) getSize().getHeight() / 4;
     }
 
     private void drawSquare(Graphics g, int x, int y, Color color) {

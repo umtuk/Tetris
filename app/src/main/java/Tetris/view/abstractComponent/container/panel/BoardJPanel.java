@@ -4,30 +4,17 @@ import java.awt.Color;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
-import java.util.List;
 
 import Tetris.domain.board.constant.BoardComponent;
 import Tetris.domain.board.constant.map.BoardColorMap;
 import Tetris.domain.board.entity.Board;
 import Tetris.domain.board.service.BoardService;
-import Tetris.global.config.constant.Difficulty;
 import Tetris.view.adapter.GameAdapter;
 
 public class BoardJPanel extends JPanel {
 
     private final int BOARD_WIDTH = 10;
     private final int BOARD_HEIGHT = 20;
-
-    private final int minInterval = 50;
-    private int periodInterval = 1000;
-    private int rateOfDecrease = 25;
-
-    private Timer updateTimer;
-    private Timer redrawTimer;
-
-    private boolean isPaused;
 
     private BoardService boardService = BoardService.getInstance();
 
@@ -46,35 +33,6 @@ public class BoardJPanel extends JPanel {
         setFocusable(true);
         addKeyListener(new GameAdapter());
     }
-
-    private void berforeStart(Difficulty difficulty) {
-        if (difficulty == Difficulty.EASY) {
-            periodInterval = 1500;
-            rateOfDecrease = 2;
-        }
-        else if (difficulty == Difficulty.NORMAL) {
-            periodInterval = 1000;
-            rateOfDecrease = 5;
-        }
-        else if (difficulty == Difficulty.HARD) {
-            periodInterval = 750;
-            rateOfDecrease = 7;
-        }
-
-        boardService.init();
-        isPaused = false;
-    }
-
-    public void start(Difficulty difficulty) {
-        berforeStart(difficulty);
-
-        updateTimer = new Timer(periodInterval, new UpdateCycle());
-        updateTimer.start();
-
-        redrawTimer = new Timer(25, new RepaintCycle());
-        redrawTimer.start();
-    }
-
 
     private int squareWidth() {
         return (int) getSize().getWidth() / BOARD_WIDTH;
@@ -118,50 +76,5 @@ public class BoardJPanel extends JPanel {
 
         drawBoard(g);
         drawNowBlock(g);
-    }
-
-
-    private class UpdateCycle implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            update();
-        }
-        
-    }
-
-    private class RepaintCycle implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            repaint();
-        }
-        
-    }
-
-    private void update() {
-        if (isPaused) {
-            return;
-        }
-
-        List<Integer> toDelete = boardService.moveBlockDown();
-        if (toDelete != null && !toDelete.isEmpty()) {
-            // 줄 사라질 때 쓸 이펙트
-        }
-
-
-        periodInterval -= rateOfDecrease;
-        if (periodInterval < minInterval) {
-            periodInterval = minInterval;
-        }
-        updateTimer.setDelay(periodInterval);
-
-        if (boardService.isDead()) {
-            updateTimer.stop();
-            redrawTimer.stop();
-            // 게임 종료 창??
-        }
     }
 }

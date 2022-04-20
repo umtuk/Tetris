@@ -31,6 +31,7 @@ public class Score {
 
     public Score(Difficulty difficulty) {
         this.difficulty = difficulty;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public Score() {

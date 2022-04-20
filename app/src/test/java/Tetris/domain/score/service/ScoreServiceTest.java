@@ -21,7 +21,7 @@ public class ScoreServiceTest {
     @Test
     void testCreateScore() {
         long currentMillis = System.currentTimeMillis();
-        Score score = scoreService.createScore();
+        Score score = scoreService.getScore();
 
         assertTrue(score.getDifficulty() == mainConfig.getDifficulty());
         assertTrue(Math.abs(currentMillis - score.getTimestamp()) < 1000);
@@ -36,7 +36,8 @@ public class ScoreServiceTest {
 
         Score score = new Score(username, scr, timestamp, difficulty);
 
-        scoreService.insertScore(score);
+        scoreService.setScore(score);
+        scoreService.insertScore();
 
         List<Score> result = scoreDao.readAll();
 
@@ -59,18 +60,17 @@ public class ScoreServiceTest {
 
     @Test
     void testSetUsername() {
-        Score score = new Score(Difficulty.EASY);
         String expected = "HELLO";
-        scoreService.setUsername(score, expected);
-        assertTrue(score.getUsername().equals(expected));
+        scoreService.setUsername(expected);
+        assertTrue(scoreService.getScore().getUsername().equals(expected));
     }
 
     @Test
     void testUpdateScore() {
-        Score score = new Score(mainConfig.getDifficulty());
+        Score score = scoreService.getScore();
         int prevScore = score.getScore();
 
-        scoreService.updateScore(score, 1, 2);
+        scoreService.updateScore(1, 2);
 
         assertTrue(prevScore < score.getScore());
     }
