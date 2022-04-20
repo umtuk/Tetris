@@ -1,6 +1,7 @@
 package Tetris.global.config.dao;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.event.KeyEvent;
@@ -29,8 +30,9 @@ public class ConfigDaoTest {
 
     @BeforeAll
     public void beforeAll() throws SQLException {
-        configDao.createDefaultIfNotExists();
         prev = configDao.read();
+        configDao.createDefaultIfNotExists();
+        configDao.setMainConfig(configDao.read());
     }
 
     @Test
@@ -48,7 +50,7 @@ public class ConfigDaoTest {
         while (keyTypes.hasNext()) {
             KeyType keyType = keyTypes.next();
 
-            assertTrue(rs.getInt(configDao.getKeyType2Column().get(keyType)) == mainConfig.getKeyMap().get(keyType));
+            assertSame(rs.getInt(configDao.getKeyType2Column().get(keyType)), mainConfig.getKeyMap().get(keyType));
         }
 
         assertTrue(configDao.getInteger2Difficulty().get(rs.getInt("difficulty")) == mainConfig.getDifficulty());
