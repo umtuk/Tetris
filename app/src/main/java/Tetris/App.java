@@ -3,12 +3,15 @@
  */
 package Tetris;
 
+import Tetris.global.config.entity.MainConfig;
+import Tetris.view.frame.IndexFrame;
+import Tetris.view.frame.game.GameFrame;
+
+import java.awt.*;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        new IndexFrame();
     }
 }

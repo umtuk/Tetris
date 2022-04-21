@@ -70,6 +70,9 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
+.vscode
+*.db
+
 # Eclipse Gradle plugin generated files
 # Eclipse Core
 # JDT-specific (Eclipse Java Development Tools)
