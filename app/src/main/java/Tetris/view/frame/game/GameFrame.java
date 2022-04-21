@@ -4,45 +4,47 @@ import Tetris.domain.board.service.BoardService;
 import Tetris.domain.score.entity.Score;
 import Tetris.domain.score.service.ScoreService;
 import Tetris.global.config.constant.Difficulty;
+import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
+import Tetris.global.config.entity.MainConfig;
 import Tetris.view.abstractComponent.container.panel.BoardJPanel;
 import Tetris.view.abstractComponent.container.panel.NextBlockJPanel;
 import Tetris.view.abstractComponent.container.panel.ScoreBoardJPanel;
 import Tetris.view.abstractComponent.container.window.frame.SimpleJFrame;
+import Tetris.view.frame.score.InputNameFrame;
+import Tetris.view.frame.score.ScoreBoardFrame;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-
+import java.sql.SQLException;
 import java.util.List;
 
 public class GameFrame extends SimpleJFrame {
 
     private final String title = "Tetris";
 
+    private static MainConfig mainConfig = MainConfig.getInstance();
+
     private BoardService boardService;
     private ScoreService scoreService;
 
-
-    private final int minInterval = 50;
+    private final static int minInterval = 50;
     public static int periodInterval = 1000;
-    private int rateOfDecrease = 25;
+    private static int rateOfDecrease = 25;
 
-    private Timer updateTimer;
+    private static Timer updateTimer;
     private Timer redrawTimer;
-
-    private boolean isPaused;
-
 
     private BoardJPanel boardJPanel;
     private NextBlockJPanel nextBlockJPanel;
     private ScoreBoardJPanel scoreBoardJPanel;
     
     private JPanel eastPanel;
-    private JPanel emptyPanel;
+    private JPanel westPanel;
 
-    public GameFrame(WindowSize windowSize, Difficulty difficulty) {
-        super(windowSize);
+    public GameFrame() {
+        super();
 
         boardService = BoardService.getInstance();
         scoreService = ScoreService.getInstance();
@@ -50,7 +52,22 @@ public class GameFrame extends SimpleJFrame {
         addComponents();
         initFrame();
 
-        run(difficulty);
+        run(mainConfig.getDifficulty());
+    }
+
+    public GameFrame(int mode) {
+        super();
+
+        boardService = BoardService.getInstance();
+        scoreService = ScoreService.getInstance();
+
+        addComponents();
+        initFrame();
+
+        boardService.setItemMode();
+        scoreService.setMode(mode);
+
+        run(mainConfig.getDifficulty());
     }
 
     public void run(Difficulty difficulty) {
@@ -59,15 +76,12 @@ public class GameFrame extends SimpleJFrame {
 
 
     private void initFrame() {
-        setTitle(title);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(Color.BLACK);
-        setSize(600, 800);
-        setLocationRelativeTo(null);
+
     }
 
     private void addComponents() {
+        WindowSize windowSize = mainConfig.getWindowSize();
+
         setLayout(new BorderLayout());
 
         boardJPanel = new BoardJPanel();
@@ -75,17 +89,24 @@ public class GameFrame extends SimpleJFrame {
         scoreBoardJPanel = new ScoreBoardJPanel();
 
         eastPanel = new JPanel();
-        emptyPanel = new JPanel();
+        westPanel = new JPanel();
 
-        emptyPanel.setPreferredSize(new Dimension(160, 400)); 
-        eastPanel.setPreferredSize(new Dimension(160, 400));
+        westPanel.setBackground(Color.GRAY);
+        westPanel.setPreferredSize(new Dimension((int)(windowSize.getWidth()/4), windowSize.getHeight())); 
+        eastPanel.setPreferredSize(new Dimension((int)(windowSize.getWidth()/4), windowSize.getHeight()/2));
+        boardJPanel.setPreferredSize(new Dimension((int)(windowSize.getWidth()/3), (int)(windowSize.getHeight()*0.9)));
+        nextBlockJPanel.setPreferredSize(new Dimension((int)(windowSize.getWidth()/8), (int)(windowSize.getWidth()/8)));
+        scoreBoardJPanel.setPreferredSize(new Dimension((int)(windowSize.getWidth()/8), (int)(windowSize.getWidth()/8)));
 
+        eastPanel.setBackground(Color.GRAY);
         eastPanel.add(nextBlockJPanel);
         eastPanel.add(scoreBoardJPanel);
-        eastPanel.add(emptyPanel);
 
+        add(westPanel, BorderLayout.WEST);
         add(boardJPanel, BorderLayout.CENTER); 
         add(eastPanel, BorderLayout.EAST);
+
+        // addKeyListener(this);
     }
 
     private void berforeStart(Difficulty difficulty) {
@@ -102,8 +123,13 @@ public class GameFrame extends SimpleJFrame {
             rateOfDecrease = 7;
         }
 
-        boardService.init();
-        isPaused = false;
+        if (boardService.isItemMode()) {
+            boardService.init();
+            boardService.setItemMode();
+        }
+        else {
+            boardService.init();
+        }
     }
 
     public void start(Difficulty difficulty) {
@@ -121,7 +147,11 @@ public class GameFrame extends SimpleJFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            update();
+            try {
+                update();
+            } catch (Exception exception) {
+                //TODO: handle exception
+            }
         }
         
     }
@@ -131,35 +161,84 @@ public class GameFrame extends SimpleJFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
+            if (boardService.getForceQuit()) {
+                updateTimer.stop();
+                redrawTimer.stop();
+
+                dispose();
+                try {
+                    new InputNameFrame();
+                } catch (Exception exception) {
+                    //TODO: handle exception
+                }
+            }
             scoreBoardJPanel.updateLabels();
             repaint();
         }
     }
 
-    private void update() {
-        if (isPaused) {
+    public static List<Integer> toDelete;
+
+    private void update() throws SQLException {
+
+        if (toDelete != null) {
+            boardService.deleteFullLine(toDelete);
+            toDelete = null;
+        }
+
+        if (boardService.isPause()) {
             return;
         }
 
-        List<Integer> toDelete = boardService.moveBlockDown();
+        if (boardService.moveBlockDown()) {
+            setPeriodInterval();
+        }
+
+        toDelete = boardService.getArrayFullLines();
         if (toDelete != null && !toDelete.isEmpty()) {
             int deletedLines = toDelete.size();
             int clock = periodInterval;
 
             scoreService.updateScore(deletedLines, clock);
-            // 줄 사라질 때 쓸 이펙트
+            
         }
 
+
+        if (boardService.isDead()) {
+            updateTimer.stop();
+            redrawTimer.stop();
+
+
+            if (boardService.isItemMode()) {
+                scoreService.setMode(Score.ITEM_MODE);
+            }
+            else {
+                scoreService.setMode(Score.DEFAULT_MODE);
+            }
+
+            
+            new InputNameFrame();
+
+            dispose();
+        }
+    }
+
+    public static void setPeriodInterval() {
         periodInterval -= rateOfDecrease;
         if (periodInterval < minInterval) {
             periodInterval = minInterval;
         }
         updateTimer.setDelay(periodInterval);
+    }
 
-        if (boardService.isDead()) {
-            updateTimer.stop();
-            redrawTimer.stop();
-            // 게임 종료 창??
-        }
+    public static void drawDeletedLine(List<Integer> toDeleted) {
+
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+
+            GameFrame gameFrame = new GameFrame();
+        });
     }
 }

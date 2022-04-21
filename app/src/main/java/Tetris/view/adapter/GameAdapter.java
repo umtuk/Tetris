@@ -10,6 +10,8 @@ import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.entity.MainConfig;
 import Tetris.global.config.entity.branch.KeyMap;
 import Tetris.view.frame.game.GameFrame;
+import Tetris.view.frame.game.PauseFrame;
+
 
 public class GameAdapter extends KeyAdapter {
 
@@ -22,10 +24,23 @@ public class GameAdapter extends KeyAdapter {
         int keyCode = e.getKeyCode();
         KeyMap keyMap = mainConfig.getKeyMap();
 
+        if (boardService.isPause()) {
+            return;
+        }
+
         if (keyCode == keyMap.get(KeyType.UP)) {
-            List<Integer> toDelete = boardService.moveBlockAtOnce();
-            if (toDelete != null && !toDelete.isEmpty()) {
-                int deletedLines = toDelete.size();
+
+            if (GameFrame.toDelete != null) {
+                boardService.deleteFullLine(GameFrame.toDelete);
+                GameFrame.toDelete = null;
+            }
+
+            if (boardService.moveBlockAtOnce()) {
+                GameFrame.setPeriodInterval();
+            }
+            GameFrame.toDelete = boardService.getArrayFullLines();
+            if (GameFrame.toDelete != null && !GameFrame.toDelete.isEmpty()) {
+                int deletedLines = GameFrame.toDelete.size();
                 int clock = GameFrame.periodInterval;
     
                 scoreService.updateScore(deletedLines, clock);
@@ -39,9 +54,17 @@ public class GameAdapter extends KeyAdapter {
             boardService.moveBlockRight();
         }
         else if (keyCode == keyMap.get(KeyType.DOWN)) {
-            List<Integer> toDelete = boardService.moveBlockDown();
-            if (toDelete != null && !toDelete.isEmpty()) {
-                int deletedLines = toDelete.size();
+            if (GameFrame.toDelete != null) {
+                boardService.deleteFullLine(GameFrame.toDelete);
+                GameFrame.toDelete = null;
+            }
+
+            if (boardService.moveBlockDown()) {
+                GameFrame.setPeriodInterval();
+            }
+            GameFrame.toDelete = boardService.getArrayFullLines();
+            if (GameFrame.toDelete != null && !GameFrame.toDelete.isEmpty()) {
+                int deletedLines = GameFrame.toDelete.size();
                 int clock = GameFrame.periodInterval;
     
                 scoreService.updateScore(deletedLines, clock);
@@ -51,6 +74,9 @@ public class GameAdapter extends KeyAdapter {
         else if (keyCode == keyMap.get(KeyType.ROTATE)) {
             boardService.rotate();
         }
-        
+        else if (keyCode == keyMap.get(KeyType.PAUSE)) {
+            boardService.switchPause();
+            new PauseFrame();
+        }
     }
 }
