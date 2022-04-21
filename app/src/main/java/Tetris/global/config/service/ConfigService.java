@@ -1,6 +1,7 @@
 package Tetris.global.config.service;
 
 import Tetris.global.config.constant.ColorSet;
+import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.constant.KeyType;
 import Tetris.global.config.constant.WindowSize;
 import Tetris.global.config.dao.ConfigDao;
@@ -50,6 +51,11 @@ public class ConfigService {
 
     public void setDefaultConfig() throws SQLException {
         mainConfig.setDefault();
+        configDao.update();
+    }
+
+    public void setDifficulty(Difficulty difficulty) throws SQLException {
+        mainConfig.setDifficulty(difficulty);
         configDao.update();
     }
 }

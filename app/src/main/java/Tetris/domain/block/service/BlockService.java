@@ -6,6 +6,11 @@ import Tetris.domain.block.constant.BlockType;
 import Tetris.domain.block.constant.map.BlockFrequencyMap;
 import Tetris.domain.block.entity.Block;
 import Tetris.domain.block.entity.expend.*;
+import Tetris.domain.block.entity.item.BombItem;
+import Tetris.domain.block.entity.item.BonusScoreItem;
+import Tetris.domain.block.entity.item.DrillItem;
+import Tetris.domain.block.entity.item.WeightItem;
+import Tetris.domain.board.entity.Board;
 import Tetris.global.config.constant.ColorSet;
 import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.entity.MainConfig;
@@ -49,8 +54,10 @@ public class BlockService {
     }
     
     public void rotate(Block block) {
-        int[][] res = IntMatrixUtil.rotateClockwise(block.getShape());
-        block.setShape(res);
+        if (block.isRotatable()) {
+            int[][] res = IntMatrixUtil.rotateClockwise(block.getShape());
+            block.setShape(res);
+        }
     }
 
     public Block getRandomBlock() {
@@ -77,6 +84,52 @@ public class BlockService {
         return null;
     }
 
+    private void addLineRemover(Block block, int t) {
+        int[][] shape = block.getShape();
+
+        for (int r = 0 ; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] != 0) {
+                    if (t == 0) {
+                        shape[r][c] = Board.TYPE_LINE_REMOVER;
+                        return;
+                    }
+                    t--;
+                }
+            }
+        }
+    }
+
+    public Block getRandomItem() {
+        Block block;
+        int rand;
+        int randomNumber = (int)(Math.random() * 5);
+        switch (randomNumber) {
+            case 0: return new BombItem();
+            case 1: return new BonusScoreItem();
+            case 2: return new DrillItem();
+            case 3: 
+                block = getRandomBlock();
+                rand = (int)(Math.random() * 4);
+                addLineRemover(block, rand);
+                System.out.println("getRandomItem:: LineRemover");
+                return block;
+            case 4: return new WeightItem();
+            default:
+                block = getRandomBlock();
+                rand = (int)(Math.random() * 4);
+                addLineRemover(block, rand);
+                System.out.println("getRandomItem:: LineRemover");
+                for (int r = 0; r < block.getShape().length; r++) {
+                    for (int c = 0; c < block.getShape()[r].length; c++) {
+                        System.out.print(block.getShape()[r][c] + " ");
+                    }
+                    System.out.println();
+                }
+                return block;
+        }
+    }
+
     public int height(Block block) {
         if (block == null)
             return 0;
@@ -97,5 +150,9 @@ public class BlockService {
 
     public double[] getpPeviousProbability() {
         return previousProbability;
+    }
+
+    public boolean isMovable(Block block) {
+        return block.isMovable();
     }
 }

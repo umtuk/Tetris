@@ -4,7 +4,7 @@ package Tetris.global.constant.color;
  * 도메인 및 컴포넌트에 사용되는 모든 색을 16진수로 나타낸 int형으로 보관
  */
 public enum BaseColor {
-    WHITE(0xffffff),
+    WHITE(0xFFFFFF),
 
     CYAN(0x00ffff),
     YELLOW(0xffff00),

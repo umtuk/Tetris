@@ -153,8 +153,8 @@ public class ConfigDao {
 
         parameters = new Object[11]; setParametersByMainConfig();
         simpleSQLite.createTable(table, columns, dataTypes, optional);
-        createDefaultIfNotExists();
 
+        createDefaultIfNotExists();
         setMainConfig(read());
     }
 

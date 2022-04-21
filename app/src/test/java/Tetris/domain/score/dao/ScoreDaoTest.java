@@ -32,8 +32,9 @@ public class ScoreDaoTest {
         int scr = 322;
         long timestamp = 3213214124L;
         Difficulty difficulty = Difficulty.HARD;
+        int mode = Score.DEFAULT_MODE;
 
-        Score score = new Score(username, scr, timestamp, difficulty);
+        Score score = new Score(username, scr, timestamp, difficulty, mode);
 
         scoreDao.create(score);
 
@@ -59,8 +60,9 @@ public class ScoreDaoTest {
         int scr = 322;
         long timestamp = 3213214124L;
         Difficulty difficulty = Difficulty.HARD;
+        int mode = Score.DEFAULT_MODE;
 
-        Score score = new Score(username, scr, timestamp, difficulty);
+        Score score = new Score(username, scr, timestamp, difficulty, mode);
 
         scoreDao.create(score);
 
@@ -89,8 +91,9 @@ public class ScoreDaoTest {
         int scr = 322;
         long timestamp = 3213214124L;
         Difficulty difficulty = Difficulty.HARD;
+        int mode = Score.DEFAULT_MODE;
 
-        Score score = new Score(username, scr, timestamp, difficulty);
+        Score score = new Score(username, scr, timestamp, difficulty, mode);
 
         scoreDao.create(score);
 
@@ -107,8 +110,9 @@ public class ScoreDaoTest {
         int scr = 322;
         long timestamp = 3213214124L;
         Difficulty difficulty = Difficulty.HARD;
+        int mode = Score.DEFAULT_MODE;
 
-        Score score = new Score(username, scr, timestamp, difficulty);
+        Score score = new Score(username, scr, timestamp, difficulty, mode);
 
         scoreDao.create(score);
 

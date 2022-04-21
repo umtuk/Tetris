@@ -9,6 +9,9 @@ public abstract class Block {
     protected int[][] shape;
     protected int color;
 
+    protected boolean isRotatable;
+    protected boolean isMovable;
+
     public Block() {
 
     }
@@ -19,6 +22,9 @@ public abstract class Block {
             {0, 0}
         };
         color = BlockColorMap.getColor(colorSet, BlockType.IBLOCK);
+
+        isRotatable = true;
+        isMovable = true;
     }
 
     public int[][] getShape() {
@@ -35,5 +41,21 @@ public abstract class Block {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public boolean isMovable() {
+        return isMovable;
+    }
+
+    public boolean isRotatable() {
+        return isRotatable;
+    }
+
+    public void setMovable(boolean b) {
+        isMovable = b;
+    }
+
+    public void setRotatable(boolean b) {
+        isRotatable = b;
     }
 }

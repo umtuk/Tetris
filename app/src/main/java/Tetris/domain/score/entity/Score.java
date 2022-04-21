@@ -12,25 +12,38 @@ public class Score {
     private String username;
     private int score;
     private long timestamp;
-    private final Difficulty difficulty;
+    private  Difficulty difficulty;
+    private int mode;
 
-    public Score(String username, int score, long timestamp, Difficulty difficulty) {
+    public final static int DEFAULT_MODE = 0;
+    public final static int ITEM_MODE = 1;
+
+    public Score(String username, int score, int mode) {
+        this();
+
+        this.username = username;
+        this.score = score;
+    }
+
+    public Score(String username, int score, long timestamp, Difficulty difficulty, int mode) {
         this.username = username;
         this.score = score;
         this.timestamp = timestamp;
         this.difficulty = difficulty;
+        this.mode = mode;
     }
 
-    public Score(int id, String username, int score, long timestamp, Difficulty difficulty) {
+    public Score(int id, String username, int score, long timestamp, Difficulty difficulty, int mode) {
         this.id = id;
         this.username = username;
         this.score = score;
         this.timestamp = timestamp;
         this.difficulty = difficulty;
+        this.mode = mode;
     }
 
     public Score(Difficulty difficulty) {
-        this.difficulty = difficulty;
+        this.difficulty = mainConfig.getDifficulty();
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -72,5 +85,13 @@ public class Score {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }

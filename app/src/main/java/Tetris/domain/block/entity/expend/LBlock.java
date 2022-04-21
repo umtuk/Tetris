@@ -13,5 +13,7 @@ public class LBlock extends Block{
 			{1, 0, 0}
         };
         color = BlockColorMap.getColor(colorSet, BlockType.LBLOCK);
+        isRotatable = true;
+        isMovable = true;
      }
 }

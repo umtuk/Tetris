@@ -36,6 +36,7 @@ public class ScoreDao {
         "score",
         "timestamp",
         "difficulty",
+        "mode",
     };
 
     private final String[] createColumns = {
@@ -43,6 +44,7 @@ public class ScoreDao {
         "score",
         "timestamp",
         "difficulty",
+        "mode",
     };
 
     private final String[] dataTypes = {
@@ -52,11 +54,13 @@ public class ScoreDao {
         "integer",
         "integer",
         "integer",
+        "integer",
     };
 
     private final String[][] optional = {
         {"PRIMARY KEY"},
 
+        {"NOT NULL",},
         {"NOT NULL",},
         {"NOT NULL",},
         {"NOT NULL",},
@@ -73,7 +77,7 @@ public class ScoreDao {
     public ScoreDao() throws SQLException {
         simpleSQLite = SimpleSQLite.getInstance();
 
-        parameters = new Object[4];
+        parameters = new Object[5];
         initMaps();
         simpleSQLite.createTable(table, columns, dataTypes, optional);
     }
@@ -97,6 +101,7 @@ public class ScoreDao {
         parameters[1] = (Integer)score.getScore();
         parameters[2] = (Long)score.getTimestamp();
         parameters[3] = difficulty2Integer.get(score.getDifficulty());
+        parameters[4] = score.getMode();
     }
 
     private List<Score> toEntity(ResultSet rs) throws SQLException {
@@ -109,8 +114,9 @@ public class ScoreDao {
             int score = rs.getInt("score");
             long timestamp = rs.getLong("timestamp");
             Difficulty difficulty = integer2Difficulty.get(rs.getInt("difficulty"));
+            int mode = rs.getInt("mode");
 
-            ret.add(new Score(id, username, score, timestamp, difficulty));
+            ret.add(new Score(id, username, score, timestamp, difficulty, mode));
         }
 
         return ret;

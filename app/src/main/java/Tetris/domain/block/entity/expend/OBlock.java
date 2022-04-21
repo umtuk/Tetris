@@ -13,5 +13,7 @@ public class OBlock extends Block {
 			{1, 1}
         };
         color = BlockColorMap.getColor(colorSet, BlockType.OBLOCK);
+        isRotatable = true;
+        isMovable = true;
     }
 }

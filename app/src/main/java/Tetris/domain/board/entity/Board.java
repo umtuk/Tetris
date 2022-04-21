@@ -10,6 +10,12 @@ public class Board {
     public static final int TYPE_EMPTY = 0;
     public static final int TYPE_STATIC = 1;
     public static final int TYPE_DYNAMIC = 2;
+
+    public static final int TYPE_BOMB = 3;
+    public static final int TYPE_BONUS_SCORE = 4;
+    public static final int TYPE_DRILL = 5;
+    public static final int TYPE_LINE_REMOVER = 6;
+    public static final int TYPE_WEIGHT = 7;
     
     private int[][][] board;
 

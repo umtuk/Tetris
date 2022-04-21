@@ -12,5 +12,7 @@ public class IBlock extends Block {
             {1, 1, 1, 1},
         };
         color = BlockColorMap.getColor(colorSet, BlockType.IBLOCK);
+        isRotatable = true;
+        isMovable = true;
     }
 }

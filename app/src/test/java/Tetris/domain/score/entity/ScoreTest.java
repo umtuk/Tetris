@@ -12,8 +12,9 @@ public class ScoreTest {
     private final int scr = 320;
     private final Long timestamp = System.currentTimeMillis();
     private final Difficulty difficulty = Difficulty.EASY;
+    private final int mode = Score.DEFAULT_MODE;
 
-    private Score score = new Score(username, scr, timestamp, difficulty);
+    Score score = new Score(username, scr, timestamp, difficulty, mode);
 
     @Test
     void testGetDifficulty() {

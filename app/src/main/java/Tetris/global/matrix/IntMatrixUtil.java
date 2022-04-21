@@ -32,6 +32,8 @@ public class IntMatrixUtil {
         int sumR = 0;
         int sumC = 0;
 
+        int count = countNotZeroValue(matrix);
+
         for (int r = 0; r < row; r++)
             for (int c = 0; c < col; c++) {
                 if (matrix[r][c] != 0) {
@@ -40,8 +42,8 @@ public class IntMatrixUtil {
                 }
             }
 
-        int avgR = sumR / 4;
-        int avgC = sumC / 4;
+        int avgR = sumR / count;
+        int avgC = sumC / count;
 
         return new int[]{ avgR, avgC };
     }
@@ -54,6 +56,22 @@ public class IntMatrixUtil {
     public static int lengthCenter2Bottom(int[][] matrix) {
 
         return lengthCenter2Bottom(matrix, findNearestCenter(matrix));
+    }
+
+    public static int countNotZeroValue(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        int i = 0;
+        for (int r = 0; r < row; r++) {
+            for (int c = 0 ; c < col; c++) {
+                if (matrix[r][c] != 0) {
+                    i++;
+                }
+            }
+        }
+
+        return i;
     }
 
     public static int[][] findAllNotZeroValuePos(int[][] matrix, int count) {

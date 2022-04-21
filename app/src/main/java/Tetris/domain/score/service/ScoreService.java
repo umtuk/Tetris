@@ -1,10 +1,12 @@
 package Tetris.domain.score.service;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import Tetris.domain.score.dao.ScoreDao;
 import Tetris.domain.score.entity.Score;
+import Tetris.domain.score.entity.ScoreComparator;
 import Tetris.global.config.constant.Difficulty;
 import Tetris.global.config.entity.MainConfig;
 
@@ -32,7 +34,14 @@ public class ScoreService {
     }
 
     public List<Score> readAll() throws SQLException {
-        return scoreDao.readAll();
+        List<Score> result = scoreDao.readAll();
+        Collections.sort(result, new ScoreComparator().reversed());
+
+        if (result.size() >= 20) {
+            return result.subList(0, 20);
+        }
+
+        return result;
     }
 
     public void updateScore(int deletedLines, double clock) {
@@ -52,7 +61,12 @@ public class ScoreService {
             weight = 1.0;
         }
 
-        updated += (int)(weight * deletedLines / clock);
+        if (deletedLines != 0) {
+            updated += (int)(weight * deletedLines * 3 / clock);
+        }
+        else {
+            updated += (int)(weight / clock);
+        }
         score.setScore(updated);
     }
 
@@ -70,5 +84,13 @@ public class ScoreService {
 
     public void setScore(Score score) {
         this.score = score;
+    }
+
+    public void deleteAll() throws SQLException {
+        scoreDao.deleteAll();
+    }
+
+    public void setMode(int mode) {
+        score.setMode(mode);
     }
 }

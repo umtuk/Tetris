@@ -13,5 +13,7 @@ public class ZBlock extends Block {
 			{0, 1, 1}
         };
         color = BlockColorMap.getColor(colorSet, BlockType.ZBLOCK);
+        isRotatable = true;
+        isMovable = true;
     }
 }
